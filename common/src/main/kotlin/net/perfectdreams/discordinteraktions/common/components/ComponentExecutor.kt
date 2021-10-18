@@ -1,6 +1,6 @@
 package net.perfectdreams.discordinteraktions.common.components
 
-interface ComponentExecutor {
+public interface ComponentExecutor {
     /**
      * Used by the [net.perfectdreams.discordinteraktions.declarations.slash.SlashCommandExecutorDeclaration] to match declarations to executors.
      *
@@ -8,5 +8,5 @@ interface ComponentExecutor {
      *
      * To avoid this issue, you can replace the signature with another unique identifier
      */
-    open fun signature(): Any = this::class
+    public open fun signature(): Any = this::class
 }

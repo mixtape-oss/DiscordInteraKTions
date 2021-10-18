@@ -1,5 +1,6 @@
 package net.perfectdreams.discordinteraktions.common.context.components
 
+import dev.kord.common.entity.DiscordInteraction
 import dev.kord.common.entity.Snowflake
 import net.perfectdreams.discordinteraktions.api.entities.User
 import net.perfectdreams.discordinteraktions.common.builder.message.modify.EphemeralInteractionMessageModifyBuilder
@@ -11,24 +12,25 @@ import net.perfectdreams.discordinteraktions.common.entities.messages.EditablePe
 import net.perfectdreams.discordinteraktions.common.entities.messages.Message
 import net.perfectdreams.discordinteraktions.common.interactions.InteractionData
 
-open class ComponentContext(
+public open class ComponentContext(
     bridge: RequestBridge,
     sender: User,
     channelId: Snowflake,
-    val message: Message,
-    data: InteractionData
-) : InteractionContext(bridge, sender, channelId, data) {
-    suspend fun deferUpdateMessage() {
+    public val message: Message,
+    data: InteractionData,
+    interaction: DiscordInteraction
+) : InteractionContext(bridge, sender, channelId, data, interaction) {
+    public suspend fun deferUpdateMessage() {
         if (!isDeferred) {
             bridge.manager.deferUpdateMessage()
         }
     }
 
-    suspend fun updateMessage(block: PublicInteractionMessageModifyBuilder.() -> (Unit))
-            = updateMessage(PublicInteractionMessageModifyBuilder().apply(block))
+    public suspend fun updateMessage(block: PublicInteractionMessageModifyBuilder.() -> (Unit)): EditablePersistentMessage =
+        updateMessage(PublicInteractionMessageModifyBuilder().apply(block))
 
-    suspend fun updateEphemeralMessage(block: EphemeralInteractionMessageModifyBuilder.() -> (Unit))
-            = updateEphemeralMessage(EphemeralInteractionMessageModifyBuilder().apply(block))
+    public suspend fun updateEphemeralMessage(block: EphemeralInteractionMessageModifyBuilder.() -> (Unit)): EditableEphemeralMessage =
+        updateEphemeralMessage(EphemeralInteractionMessageModifyBuilder().apply(block))
 
     private suspend fun updateMessage(message: PublicInteractionMessageModifyBuilder): EditablePersistentMessage {
         // Check if state matches what we expect

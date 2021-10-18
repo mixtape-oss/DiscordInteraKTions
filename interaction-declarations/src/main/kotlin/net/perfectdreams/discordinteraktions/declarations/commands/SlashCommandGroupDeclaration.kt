@@ -1,7 +1,7 @@
 package net.perfectdreams.discordinteraktions.declarations.commands
 
-class SlashCommandGroupDeclaration(
+public class SlashCommandGroupDeclaration(
     name: String,
-    val description: String,
-    val subcommands: List<SlashCommandDeclaration>
+    public val description: String,
+    public val subcommands: List<SlashCommandDeclaration>
 ) : InteractionCommandDeclaration(name)

@@ -5,6 +5,6 @@ import net.perfectdreams.discordinteraktions.declarations.commands.slash.options
 
 // The "parent" is Any to avoid issues with anonymous classes
 // When using anonymous classes, you can use another type to match declarations
-open class SlashCommandExecutorDeclaration(parent: Any) : ApplicationCommandExecutorDeclaration(parent) {
-    open val options: CommandOptions = CommandOptions.NO_OPTIONS
+public open class SlashCommandExecutorDeclaration(parent: Any) : ApplicationCommandExecutorDeclaration(parent) {
+    public open val options: CommandOptions = CommandOptions.NO_OPTIONS
 }

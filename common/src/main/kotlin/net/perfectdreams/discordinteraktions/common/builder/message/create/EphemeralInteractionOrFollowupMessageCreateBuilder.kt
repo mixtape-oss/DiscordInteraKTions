@@ -5,7 +5,7 @@ import dev.kord.rest.builder.message.AllowedMentionsBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
 
 // From Kord, however this is a interaction OR followup create builder
-class EphemeralInteractionOrFollowupMessageCreateBuilder : EphemeralMessageCreateBuilder {
+public class EphemeralInteractionOrFollowupMessageCreateBuilder : EphemeralMessageCreateBuilder {
     override var content: String? = null
 
     override var tts: Boolean? = null

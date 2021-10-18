@@ -30,25 +30,23 @@ import net.perfectdreams.discordinteraktions.platforms.kord.entities.messages.Ko
  * @param request The interaction (wrapped by the [InteractionRequestHandler]
  */
 @OptIn(KordPreview::class)
-class HttpRequestManager(
+public class HttpRequestManager(
     bridge: RequestBridge,
-    val rest: RestClient,
-    val applicationId: Snowflake,
-    val interactionToken: String,
-    val request: DiscordInteraction
+    public val rest: RestClient,
+    public val applicationId: Snowflake,
+    public val interactionToken: String,
+    public val request: DiscordInteraction
 ) : RequestManager(bridge) {
-    companion object {
-        private val logger = KotlinLogging.logger {}
-    }
+    public companion object;
 
     init {
         require(bridge.state.value != InteractionRequestState.NOT_REPLIED_YET) { "HttpRequestManager shouldn't be in the NOT_REPLIED_YET state!" }
     }
 
-    override suspend fun deferChannelMessage() =
+    override suspend fun deferChannelMessage(): Nothing =
         error("Can't defer an interaction that was already deferred!")
 
-    override suspend fun deferChannelMessageEphemerally() =
+    override suspend fun deferChannelMessageEphemerally(): Nothing =
         error("Can't defer an interaction that was already deferred!")
 
     override suspend fun sendPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage {
@@ -100,7 +98,7 @@ class HttpRequestManager(
         )
     }
 
-    override suspend fun deferUpdateMessage() =
+    override suspend fun deferUpdateMessage(): Nothing =
         error("Can't defer an interaction that was already deferred!")
 
     override suspend fun updateMessage(message: PublicInteractionMessageModifyBuilder): EditablePersistentMessage {

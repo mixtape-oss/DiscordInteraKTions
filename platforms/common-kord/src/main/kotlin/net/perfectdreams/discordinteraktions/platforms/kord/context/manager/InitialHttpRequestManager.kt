@@ -39,16 +39,14 @@ import net.perfectdreams.discordinteraktions.platforms.kord.entities.messages.Ko
  * @param request The Discord Interaction request
  */
 @OptIn(KordPreview::class)
-class InitialHttpRequestManager(
+public class InitialHttpRequestManager(
     bridge: RequestBridge,
-    val rest: RestClient,
-    val applicationId: Snowflake,
-    val interactionToken: String,
-    val request: DiscordInteraction
+    public val rest: RestClient,
+    public val applicationId: Snowflake,
+    public val interactionToken: String,
+    public val request: DiscordInteraction
 ) : RequestManager(bridge) {
-    companion object {
-        private val logger = KotlinLogging.logger {}
-    }
+    public companion object;
 
     init {
         require(bridge.state.value == InteractionRequestState.NOT_REPLIED_YET) { "HttpRequestManager should be in the NOT_REPLIED_YET state!" }
@@ -238,7 +236,6 @@ class InitialHttpRequestManager(
         )
 
         bridge.state.value = InteractionRequestState.ALREADY_REPLIED
-
         bridge.manager = HttpRequestManager(
             bridge,
             rest,

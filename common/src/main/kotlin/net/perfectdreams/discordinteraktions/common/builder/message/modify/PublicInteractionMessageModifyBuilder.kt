@@ -8,9 +8,9 @@ import dev.kord.rest.builder.message.AllowedMentionsBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
 
 // From Kord, we copied this to allow our extension methods to be available when using methods that use modify
-class PublicInteractionMessageModifyBuilder : PersistentMessageModifyBuilder {
+public class PublicInteractionMessageModifyBuilder : PersistentMessageModifyBuilder {
     // We need to access the delegated stuff ourselves
-    override var state = MessageModifyStateHolder()
+    override var state: MessageModifyStateHolder = MessageModifyStateHolder()
 
     override var files: MutableList<NamedFile>? by state::files.delegate()
 

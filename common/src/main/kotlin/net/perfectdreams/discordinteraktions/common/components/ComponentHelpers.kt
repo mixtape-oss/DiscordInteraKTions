@@ -7,12 +7,12 @@ import dev.kord.rest.builder.component.SelectMenuBuilder
 import net.perfectdreams.discordinteraktions.common.components.buttons.ButtonClickExecutorDeclaration
 import net.perfectdreams.discordinteraktions.common.components.selects.SelectMenuExecutorDeclaration
 
-fun ActionRowBuilder.interactiveButton(
+public fun ActionRowBuilder.interactiveButton(
     style: ButtonStyle,
     executor: ButtonClickExecutorDeclaration,
     builder: ButtonBuilder.InteractionButtonBuilder.() -> Unit
 ) {
-    require(style != ButtonStyle.Link) { "You cannot use a ButtonStyle.Link style in a interactive button! Please use \"linkButton(...)\" if you want to create a button with a link" }
+    require(style != ButtonStyle.Link) { "You cannot use a ButtonStyle.Link style in an interactive button! Please use \"linkButton(...)\" if you want to create a button with a link" }
 
     interactionButton(
         style,
@@ -22,13 +22,13 @@ fun ActionRowBuilder.interactiveButton(
     }
 }
 
-fun ActionRowBuilder.interactiveButton(
+public fun ActionRowBuilder.interactiveButton(
     style: ButtonStyle,
     label: String,
     executor: ButtonClickExecutorDeclaration,
     builder: ButtonBuilder.InteractionButtonBuilder.() -> Unit = {}
 ) {
-    require(style != ButtonStyle.Link) { "You cannot use a ButtonStyle.Link style in a interactive button! Please use \"linkButton(...)\" if you want to create a button with a link" }
+    require(style != ButtonStyle.Link) { "You cannot use a ButtonStyle.Link style in an interactive button! Please use \"linkButton(...)\" if you want to create a button with a link" }
 
     interactionButton(
         style,
@@ -39,13 +39,13 @@ fun ActionRowBuilder.interactiveButton(
     }
 }
 
-fun ActionRowBuilder.interactiveButton(
+public fun ActionRowBuilder.interactiveButton(
     style: ButtonStyle,
     executor: ButtonClickExecutorDeclaration,
     data: String,
     builder: ButtonBuilder.InteractionButtonBuilder.() -> Unit
 ) {
-    require(style != ButtonStyle.Link) { "You cannot use a ButtonStyle.Link style in a interactive button! Please use \"linkButton(...)\" if you want to create a button with a link" }
+    require(style != ButtonStyle.Link) { "You cannot use a ButtonStyle.Link style in an interactive button! Please use \"linkButton(...)\" if you want to create a button with a link" }
 
     interactionButton(
         style,
@@ -55,14 +55,14 @@ fun ActionRowBuilder.interactiveButton(
     }
 }
 
-fun ActionRowBuilder.interactiveButton(
+public fun ActionRowBuilder.interactiveButton(
     style: ButtonStyle,
     label: String,
     executor: ButtonClickExecutorDeclaration,
     data: String,
     builder: ButtonBuilder.InteractionButtonBuilder.() -> Unit = {}
 ) {
-    require(style != ButtonStyle.Link) { "You cannot use a ButtonStyle.Link style in a interactive button! Please use \"linkButton(...)\" if you want to create a button with a link" }
+    require(style != ButtonStyle.Link) { "You cannot use a ButtonStyle.Link style in an interactive button! Please use \"linkButton(...)\" if you want to create a button with a link" }
 
     interactionButton(
         style,
@@ -73,7 +73,7 @@ fun ActionRowBuilder.interactiveButton(
     }
 }
 
-fun ActionRowBuilder.selectMenu(
+public fun ActionRowBuilder.selectMenu(
     executor: SelectMenuExecutorDeclaration,
     builder: SelectMenuBuilder.() -> Unit = {}
 ) {
@@ -84,7 +84,7 @@ fun ActionRowBuilder.selectMenu(
     }
 }
 
-fun ActionRowBuilder.selectMenu(
+public fun ActionRowBuilder.selectMenu(
     executor: SelectMenuExecutorDeclaration,
     data: String,
     builder: SelectMenuBuilder.() -> Unit = {}

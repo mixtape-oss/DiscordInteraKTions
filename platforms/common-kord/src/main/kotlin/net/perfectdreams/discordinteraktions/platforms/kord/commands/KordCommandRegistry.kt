@@ -4,24 +4,24 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.rest.builder.interaction.*
 import dev.kord.rest.service.RestClient
 import mu.KotlinLogging
-import net.perfectdreams.discordinteraktions.common.commands.CommandManager
 import net.perfectdreams.discordinteraktions.common.commands.CommandRegistry
-import net.perfectdreams.discordinteraktions.declarations.commands.UserCommandDeclaration
-import net.perfectdreams.discordinteraktions.declarations.commands.InteractionCommandDeclaration
-import net.perfectdreams.discordinteraktions.declarations.commands.MessageCommandDeclaration
-import net.perfectdreams.discordinteraktions.declarations.commands.SlashCommandDeclaration
-import net.perfectdreams.discordinteraktions.declarations.commands.SlashCommandGroupDeclaration
+import net.perfectdreams.discordinteraktions.common.commands.InteraKTions
+import net.perfectdreams.discordinteraktions.declarations.commands.*
 import net.perfectdreams.discordinteraktions.declarations.commands.slash.options.CommandOption
 import net.perfectdreams.discordinteraktions.declarations.commands.slash.options.CommandOptionType
 
-val kordCommandRegistryLogger = KotlinLogging.logger {  }
+internal val kordCommandRegistryLogger = KotlinLogging.logger { }
 
-class KordCommandRegistry(private val applicationId: Snowflake, private val rest: RestClient, private val manager: CommandManager) : CommandRegistry {
+public class KordCommandRegistry(
+    private val applicationId: Snowflake,
+    private val rest: RestClient,
+    private val manager: InteraKTions
+) : CommandRegistry {
     override suspend fun updateAllCommandsInGuild(guildId: Snowflake, deleteUnknownCommands: Boolean) {
         if (deleteUnknownCommands) {
             // Check commands that are already registered and remove the ones that aren't present in our command manager
             val commandsRegistered = rest.interaction.getGuildApplicationCommands(applicationId, guildId)
-            val commandsKnown = manager.declarations.map { it.name }
+            val commandsKnown = manager.commandDeclarations.map { it.name }
             val commandsUnknown = commandsRegistered.filter { it.name !in commandsKnown }
             kordCommandRegistryLogger.debug { "Removing ${commandsUnknown.size} unknown commands for guild ${guildId.asString}" }
 
@@ -33,7 +33,7 @@ class KordCommandRegistry(private val applicationId: Snowflake, private val rest
         rest.interaction.createGuildApplicationCommands(
             applicationId,
             guildId,
-            manager.declarations.map { convertCommandDeclarationToKord(it).toRequest() }
+            manager.commandDeclarations.map { convertCommandDeclarationToKord(it).toRequest() }
         )
     }
 
@@ -43,7 +43,7 @@ class KordCommandRegistry(private val applicationId: Snowflake, private val rest
         if (deleteUnknownCommands) {
             // Check commands that are already registered and remove the ones that aren't present in our command manager
             val commandsRegistered = rest.interaction.getGlobalApplicationCommands(kordApplicationId)
-            val commandsKnown = manager.declarations.map { it.name }
+            val commandsKnown = manager.commandDeclarations.map { it.name }
             val commandsUnknown = commandsRegistered.filterNot { it.name in commandsKnown }
             kordCommandRegistryLogger.debug { "Removing ${commandsUnknown.size} unknown global commands." }
 
@@ -54,7 +54,7 @@ class KordCommandRegistry(private val applicationId: Snowflake, private val rest
 
         rest.interaction.createGlobalApplicationCommands(
             kordApplicationId,
-            manager.declarations.map { convertCommandDeclarationToKord(it).toRequest() }
+            manager.commandDeclarations.map { convertCommandDeclarationToKord(it).toRequest() }
         )
     }
 
@@ -75,7 +75,11 @@ class KordCommandRegistry(private val applicationId: Snowflake, private val rest
                 // We can only have (subcommands OR subcommand groups) OR arguments
                 if (declaration.subcommands.isNotEmpty() || declaration.subcommandGroups.isNotEmpty()) {
                     declaration.subcommands.forEach { commandData.options?.add(convertSubcommandDeclarationToKord(it)) }
-                    declaration.subcommandGroups.forEach { commandData.options?.add(convertSubcommandGroupDeclarationToKord(it)) }
+                    declaration.subcommandGroups.forEach {
+                        commandData.options?.add(
+                            convertSubcommandGroupDeclarationToKord(it)
+                        )
+                    }
                 } else {
                     val executor = declaration.executor ?: error("Root command without an executor!")
                     val options = executor.options

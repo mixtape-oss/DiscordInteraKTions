@@ -1,7 +1,9 @@
 package net.perfectdreams.discordinteraktions.common.utils
 
+import dev.kord.rest.builder.message.EmbedBuilder
+
 // Utilities extension methods for Kord Embeds, mostly providing functions to replace Kord's embed callbacks
-fun dev.kord.rest.builder.message.EmbedBuilder.author(name: String, url: String? = null, iconUrl: String? = null) {
+public fun EmbedBuilder.author(name: String, url: String? = null, iconUrl: String? = null) {
     author {
         this.name = name
         this.url = this.url
@@ -9,11 +11,11 @@ fun dev.kord.rest.builder.message.EmbedBuilder.author(name: String, url: String?
     }
 }
 
-var dev.kord.rest.builder.message.EmbedBuilder.thumbnailUrl: String?
-    get() = this.thumbnail?.url
+public var EmbedBuilder.thumbnailUrl: String?
+    get() = thumbnail?.url
     set(value) {
         if (value == null) {
-            this.thumbnail = null
+            thumbnail = null
         } else {
             thumbnail {
                 this.url = value
@@ -21,13 +23,15 @@ var dev.kord.rest.builder.message.EmbedBuilder.thumbnailUrl: String?
         }
     }
 
-fun dev.kord.rest.builder.message.EmbedBuilder.footer(text: String, iconUrl: String? = null) {
+public fun EmbedBuilder.footer(text: String, iconUrl: String? = null) {
     footer {
         this.text = text
         this.icon = iconUrl
     }
 }
 
-fun dev.kord.rest.builder.message.EmbedBuilder.field(name: String, value: String, inline: Boolean = false) = field(name, inline) { value }
+public fun EmbedBuilder.field(name: String, value: String, inline: Boolean = false): Unit =
+    field(name, inline) { value }
 
-fun dev.kord.rest.builder.message.EmbedBuilder.inlineField(name: String, value: String) = field(name, true) { value }
+public fun EmbedBuilder.inlineField(name: String, value: String): Unit =
+    field(name, true) { value }

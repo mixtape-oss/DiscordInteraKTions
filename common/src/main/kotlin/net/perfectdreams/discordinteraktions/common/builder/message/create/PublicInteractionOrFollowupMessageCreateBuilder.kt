@@ -9,8 +9,7 @@ import dev.kord.rest.builder.message.EmbedBuilder
  * Message builder for publicly responding to an interaction.
  */
 // From Kord, however this is a interaction OR followup create builder
-class PublicInteractionOrFollowupMessageCreateBuilder : PersistentMessageCreateBuilder {
-
+public class PublicInteractionOrFollowupMessageCreateBuilder : PersistentMessageCreateBuilder {
     override var content: String? = null
 
     override var tts: Boolean? = null

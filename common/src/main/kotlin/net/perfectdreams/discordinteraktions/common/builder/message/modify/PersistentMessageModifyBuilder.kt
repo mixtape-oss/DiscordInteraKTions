@@ -11,25 +11,24 @@ import java.nio.file.Path
 /**
  * Message builder for a message that persists between client reloads.
  */
-interface PersistentMessageModifyBuilder : MessageModifyBuilder {
+public interface PersistentMessageModifyBuilder : MessageModifyBuilder {
     // We need to access the delegated stuff ourselves
-    var state: MessageModifyStateHolder
+    public var state: MessageModifyStateHolder
 
     /**
      * The files to include as attachments
      */
-    var files: MutableList<NamedFile>?
+    public var files: MutableList<NamedFile>?
 
-    var attachments: MutableList<DiscordAttachment>?
+    public var attachments: MutableList<DiscordAttachment>?
 
-    fun addFile(name: String, content: InputStream) {
+    public fun addFile(name: String, content: InputStream) {
         files = (files ?: mutableListOf()).also {
             it.add(NamedFile(name, content))
         }
     }
 
-    suspend fun addFile(path: Path) = withContext(Dispatchers.IO) {
+    public suspend fun addFile(path: Path): Unit = withContext(Dispatchers.IO) {
         addFile(path.fileName.toString(), Files.newInputStream(path))
     }
-
 }

@@ -1,22 +1,22 @@
 package net.perfectdreams.discordinteraktions.common.components
 
-open class ComponentDeclaration(
+public open class ComponentDeclaration(
     /**
      * The "parent" is Any to avoid issues with anonymous classes
      *
      * When using anonymous classes, you can use another type to match declarations
      */
-    val parent: Any,
+    public val parent: Any,
 
     /**
-     * The executor's ID, this is stored in the button, to be able to figure out what executor should be used
+     * The executor's ID regex, this is used to figure out what executor a button should use.
      *
      * All button executors should be unique!
      */
-    val id: String
+    public val id: String
 ) {
-    companion object {
-        val ID_REGEX = Regex("[A-z0-9]+")
+    public companion object {
+        public val ID_REGEX: Regex = Regex("[A-z0-9]+")
     }
 
     init {

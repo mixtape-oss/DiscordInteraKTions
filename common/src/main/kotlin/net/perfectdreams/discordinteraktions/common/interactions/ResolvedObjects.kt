@@ -7,8 +7,8 @@ import net.perfectdreams.discordinteraktions.common.entities.messages.Message
 
 // TODO: channels
 // TODO: roles
-class ResolvedObjects(
-    val users: Map<Snowflake, User>?,
-    val members: Map<Snowflake, Member>?,
-    val messages: Map<Snowflake, Message>?
+public data class ResolvedObjects(
+    public val users: Map<Snowflake, User>?,
+    public val members: Map<Snowflake, Member>?,
+    public val messages: Map<Snowflake, Message>?
 )

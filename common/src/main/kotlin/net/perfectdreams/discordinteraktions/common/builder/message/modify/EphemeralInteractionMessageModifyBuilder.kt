@@ -6,9 +6,9 @@ import dev.kord.rest.builder.message.AllowedMentionsBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
 
 // From Kord, we copied this to allow our extension methods to be available when using methods that use modify
-class EphemeralInteractionMessageModifyBuilder : EphemeralMessageModifyBuilder {
+public class EphemeralInteractionMessageModifyBuilder : EphemeralMessageModifyBuilder {
     // We need to access the delegated stuff ourselves
-    override var state = MessageModifyStateHolder()
+    override var state: MessageModifyStateHolder = MessageModifyStateHolder()
 
     override var content: String? by state::content.delegate()
 

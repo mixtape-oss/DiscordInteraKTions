@@ -8,7 +8,7 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 @OptIn(ExperimentalContracts::class)
-fun slashCommand(name: String, description: String, builder: SlashCommandDeclarationBuilder.() -> (Unit)): SlashCommandDeclaration {
+public fun slashCommand(name: String, description: String, builder: SlashCommandDeclarationBuilder.() -> (Unit)): SlashCommandDeclaration {
     contract {
         callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
     }
@@ -18,17 +18,17 @@ fun slashCommand(name: String, description: String, builder: SlashCommandDeclara
         .build()
 }
 
-open class SlashCommandDeclarationBuilder(val name: String, val description: String) : ApplicationCommandDeclarationBuilder {
-    var executor: SlashCommandExecutorDeclaration? = null
-    val subcommands = mutableListOf<SlashCommandDeclaration>()
-    val subcommandGroups = mutableListOf<SlashCommandGroupDeclaration>()
+public open class SlashCommandDeclarationBuilder(public val name: String, public val description: String) : ApplicationCommandDeclarationBuilder {
+    public var executor: SlashCommandExecutorDeclaration? = null
+    public val subcommands: MutableList<SlashCommandDeclaration> = mutableListOf()
+    public val subcommandGroups: MutableList<SlashCommandGroupDeclaration> = mutableListOf()
 
-    fun subcommand(name: String, description: String, block: SlashCommandDeclarationBuilder.() -> (Unit)) {
+    public fun subcommand(name: String, description: String, block: SlashCommandDeclarationBuilder.() -> (Unit)) {
         subcommands += SlashCommandDeclarationBuilder(name, description).apply(block)
             .build()
     }
 
-    fun subcommandGroup(name: String, description: String, block: SlashCommandGroupDeclarationBuilder.() -> (Unit)) {
+    public fun subcommandGroup(name: String, description: String, block: SlashCommandGroupDeclarationBuilder.() -> (Unit)) {
         subcommandGroups += SlashCommandGroupDeclarationBuilder(name, description).apply(block)
             .build()
     }
@@ -44,15 +44,15 @@ open class SlashCommandDeclarationBuilder(val name: String, val description: Str
     }
 }
 
-open class SlashCommandGroupDeclarationBuilder(val name: String, val description: String) {
+public open class SlashCommandGroupDeclarationBuilder(public val name: String, public val description: String) {
     // Groups can't have executors!
-    val subcommands = mutableListOf<SlashCommandDeclaration>()
+    public val subcommands: MutableList<SlashCommandDeclaration> = mutableListOf()
 
-    fun subcommand(name: String, description: String, block: SlashCommandDeclarationBuilder.() -> (Unit)) {
+    public fun subcommand(name: String, description: String, block: SlashCommandDeclarationBuilder.() -> (Unit)) {
         subcommands += SlashCommandDeclarationBuilder(name, description).apply(block).build()
     }
 
-    open fun build(): SlashCommandGroupDeclaration {
+    public open fun build(): SlashCommandGroupDeclaration {
         return SlashCommandGroupDeclaration(
             name,
             description,

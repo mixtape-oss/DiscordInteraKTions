@@ -10,16 +10,18 @@ import net.perfectdreams.discordinteraktions.common.entities.messages.EditableEp
 import net.perfectdreams.discordinteraktions.common.entities.messages.EphemeralMessage
 import net.perfectdreams.discordinteraktions.platforms.kord.utils.runIfNotMissing
 
-open class KordEphemeralFollowupMessage(
+public open class KordEphemeralFollowupMessage(
     private val rest: RestClient,
     private val applicationId: Snowflake,
     private val interactionToken: String,
-    val handle: DiscordMessage
+    public val handle: DiscordMessage
 ) : EphemeralMessage, EditableEphemeralMessage {
-    override val id = handle.id
-    override val content by handle::content
+    override val id: Snowflake by handle::id
 
-    override suspend fun editMessage(block: EphemeralMessageModifyBuilder.() -> Unit): EditableEphemeralMessage = editMessage(EphemeralInteractionOrFollowupMessageModifyBuilder().apply(block))
+    override val content: String by handle::content
+
+    override suspend fun editMessage(block: EphemeralMessageModifyBuilder.() -> Unit): EditableEphemeralMessage =
+        editMessage(EphemeralInteractionOrFollowupMessageModifyBuilder().apply(block))
 
     override suspend fun editMessage(message: EphemeralMessageModifyBuilder): EditableEphemeralMessage {
         val newMessage = rest.interaction.modifyFollowupMessage(

@@ -4,4 +4,4 @@ import net.perfectdreams.discordinteraktions.declarations.commands.application.A
 
 // The "parent" is Any to avoid issues with anonymous classes
 // When using anonymous classes, you can use another type to match declarations
-open class UserCommandExecutorDeclaration(parent: Any) : ApplicationCommandExecutorDeclaration(parent)
+public open class UserCommandExecutorDeclaration(parent: Any) : ApplicationCommandExecutorDeclaration(parent)

@@ -2,6 +2,6 @@ package net.perfectdreams.discordinteraktions.api.entities
 
 import dev.kord.common.entity.Snowflake
 
-interface Guild {
-    val id: Snowflake
+public interface Guild {
+    public val id: Snowflake
 }

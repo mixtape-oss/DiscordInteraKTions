@@ -2,7 +2,6 @@ package net.perfectdreams.discordinteraktions.webserver
 
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
-import dev.kord.rest.builder.message.create.actionRow
 import net.perfectdreams.discordinteraktions.common.builder.message.actionRow
 import net.perfectdreams.discordinteraktions.common.commands.slash.SlashCommandExecutor
 import net.perfectdreams.discordinteraktions.common.components.selectMenu
@@ -22,22 +21,22 @@ suspend fun main() {
         12212
     )
 
-    interactionsServer.commandManager.register(
+    interactionsServer.interaKTions.register(
         TestCommand,
         TestCommandExecutor()
     )
 
-    interactionsServer.commandManager.register(
+    interactionsServer.interaKTions.register(
         TestClickExecutor,
         TestClickExecutor()
     )
 
-    interactionsServer.commandManager.register(
+    interactionsServer.interaKTions.register(
         TestClickWithDataExecutor,
         TestClickWithDataExecutor()
     )
 
-    interactionsServer.commandManager.register(
+    interactionsServer.interaKTions.register(
         SelectExecutor,
         SelectExecutor()
     )
@@ -45,7 +44,7 @@ suspend fun main() {
     val registry = KordCommandRegistry(
         Snowflake(744361365724069898L),
         interactionsServer.rest,
-        interactionsServer.commandManager
+        interactionsServer.interaKTions
     )
 
     registry.updateAllCommandsInGuild(Snowflake(297732013006389252L), false)

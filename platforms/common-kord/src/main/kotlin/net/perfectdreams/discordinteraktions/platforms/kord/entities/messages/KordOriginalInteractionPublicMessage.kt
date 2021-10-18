@@ -9,7 +9,7 @@ import net.perfectdreams.discordinteraktions.common.entities.messages.EditablePe
 import net.perfectdreams.discordinteraktions.common.entities.messages.PublicMessage
 import net.perfectdreams.discordinteraktions.platforms.kord.utils.runIfNotMissing
 
-class KordOriginalInteractionPublicMessage(
+public class KordOriginalInteractionPublicMessage(
     private val rest: RestClient,
     private val applicationId: Snowflake,
     private val interactionToken: String,
@@ -18,7 +18,8 @@ class KordOriginalInteractionPublicMessage(
     override val id: Snowflake
         get() = error("Original Interaction Messages do not have an ID!")
 
-    override suspend fun editMessage(block: PersistentMessageModifyBuilder.() -> Unit): EditablePersistentMessage = editMessage(PublicInteractionOrFollowupMessageModifyBuilder().apply(block))
+    override suspend fun editMessage(block: PersistentMessageModifyBuilder.() -> Unit): EditablePersistentMessage =
+        editMessage(PublicInteractionOrFollowupMessageModifyBuilder().apply(block))
 
     override suspend fun editMessage(message: PersistentMessageModifyBuilder): EditablePersistentMessage {
         val newMessage = rest.interaction.modifyInteractionResponse(

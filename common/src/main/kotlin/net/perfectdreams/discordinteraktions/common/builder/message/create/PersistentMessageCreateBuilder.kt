@@ -11,25 +11,24 @@ import java.nio.file.Path
  * Message builder for a message that persists between client reloads.
  */
 // From Kord
-interface PersistentMessageCreateBuilder : MessageCreateBuilder {
+public interface PersistentMessageCreateBuilder : MessageCreateBuilder {
 
     /**
      * The files to include as attachments.
      */
-    val files: MutableList<NamedFile>
+    public val files: MutableList<NamedFile>
 
     /**
      * Adds a file with the [name] and [content] to the attachments.
      */
-    fun addFile(name: String, content: InputStream) {
+    public fun addFile(name: String, content: InputStream) {
         files += NamedFile(name, content)
     }
 
     /**
      * Adds a file with the given [path] to the attachments.
      */
-    suspend fun addFile(path: Path) = withContext(Dispatchers.IO) {
+    public suspend fun addFile(path: Path): Unit = withContext(Dispatchers.IO) {
         addFile(path.fileName.toString(), Files.newInputStream(path))
     }
-
 }

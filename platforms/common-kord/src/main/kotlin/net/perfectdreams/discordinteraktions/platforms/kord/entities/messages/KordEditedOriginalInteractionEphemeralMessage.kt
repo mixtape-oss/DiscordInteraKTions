@@ -9,11 +9,11 @@ import net.perfectdreams.discordinteraktions.common.builder.message.modify.Ephem
 import net.perfectdreams.discordinteraktions.common.entities.messages.EditableEphemeralMessage
 import net.perfectdreams.discordinteraktions.platforms.kord.utils.runIfNotMissing
 
-class KordEditedOriginalInteractionEphemeralMessage(
+public class KordEditedOriginalInteractionEphemeralMessage(
     private val rest: RestClient,
     private val applicationId: Snowflake,
     private val interactionToken: String,
-    private val message: DiscordMessage
+    message: DiscordMessage
 ) : KordEphemeralMessage(message), EditableEphemeralMessage {
     override suspend fun editMessage(block: EphemeralMessageModifyBuilder.() -> Unit): EditableEphemeralMessage = editMessage(EphemeralInteractionOrFollowupMessageModifyBuilder().apply(block))
 

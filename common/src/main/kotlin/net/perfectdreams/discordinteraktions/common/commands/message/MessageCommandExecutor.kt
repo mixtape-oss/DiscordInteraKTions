@@ -8,8 +8,8 @@ import net.perfectdreams.discordinteraktions.common.entities.messages.Message
  * This is the class that should be inherited if you
  * want to create an Message Command.
  */
-abstract class MessageCommandExecutor : InteractionCommandExecutor() {
-    val conditions = mutableListOf<MessageCommandCondition>()
+public abstract class MessageCommandExecutor : InteractionCommandExecutor() {
+    public val conditions: MutableList<MessageCommandCondition> = mutableListOf()
 
-    abstract suspend fun execute(context: ApplicationCommandContext, targetMessage: Message)
+    public abstract suspend fun execute(context: ApplicationCommandContext, targetMessage: Message)
 }

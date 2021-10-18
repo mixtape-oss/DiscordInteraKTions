@@ -9,7 +9,7 @@ import net.perfectdreams.discordinteraktions.common.builder.message.modify.Publi
 import net.perfectdreams.discordinteraktions.common.entities.messages.EditablePersistentMessage
 import net.perfectdreams.discordinteraktions.platforms.kord.utils.runIfNotMissing
 
-class KordEditedOriginalInteractionPublicMessage(
+public class KordEditedOriginalInteractionPublicMessage(
     private val rest: RestClient,
     private val applicationId: Snowflake,
     private val interactionToken: String,

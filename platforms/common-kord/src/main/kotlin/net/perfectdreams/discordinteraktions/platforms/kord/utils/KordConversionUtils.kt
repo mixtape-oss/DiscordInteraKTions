@@ -9,7 +9,7 @@ import net.perfectdreams.discordinteraktions.platforms.kord.entities.messages.Ko
 /**
  * Converts Kord's Resolved Objects to Discord InteraKTions's Resolved Objects
  */
-fun ResolvedObjects.toDiscordInteraKTionsResolvedObjects(): net.perfectdreams.discordinteraktions.common.interactions.ResolvedObjects {
+public fun ResolvedObjects.toDiscordInteraKTionsResolvedObjects(): net.perfectdreams.discordinteraktions.common.interactions.ResolvedObjects {
     val users = this.users.value?.map {
         it.key to KordUser(it.value)
     }?.toMap()
@@ -35,7 +35,7 @@ fun ResolvedObjects.toDiscordInteraKTionsResolvedObjects(): net.perfectdreams.di
     )
 }
 
-fun <T> runIfNotMissing(optional: Optional<T>, callback: (T?) -> (Unit)) {
+public fun <T> runIfNotMissing(optional: Optional<T>, callback: (T?) -> (Unit)) {
     if (optional !is Optional.Missing)
         callback.invoke(optional.value)
 }

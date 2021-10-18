@@ -2,10 +2,10 @@ package net.perfectdreams.discordinteraktions.declarations.commands
 
 import net.perfectdreams.discordinteraktions.declarations.commands.slash.SlashCommandExecutorDeclaration
 
-open class SlashCommandDeclaration(
+public open class SlashCommandDeclaration(
     name: String,
-    val description: String,
-    val executor: SlashCommandExecutorDeclaration? = null,
-    val subcommands: List<SlashCommandDeclaration>,
-    val subcommandGroups: List<SlashCommandGroupDeclaration>
+    public val description: String,
+    public val executor: SlashCommandExecutorDeclaration? = null,
+    public val subcommands: List<SlashCommandDeclaration>,
+    public val subcommandGroups: List<SlashCommandGroupDeclaration>
 ) : InteractionCommandDeclaration(name)

@@ -8,8 +8,8 @@ import net.perfectdreams.discordinteraktions.common.context.commands.Application
  * This is the class that should be inherited if you
  * want to create an Slash Command.
  */
-abstract class SlashCommandExecutor : InteractionCommandExecutor() {
-    val conditions = mutableListOf<SlashCommandCondition>()
+public abstract class SlashCommandExecutor : InteractionCommandExecutor() {
+    public val conditions: MutableList<SlashCommandCondition> = mutableListOf()
 
-    abstract suspend fun execute(context: ApplicationCommandContext, args: SlashCommandArguments)
+    public abstract suspend fun execute(context: ApplicationCommandContext, args: SlashCommandArguments)
 }

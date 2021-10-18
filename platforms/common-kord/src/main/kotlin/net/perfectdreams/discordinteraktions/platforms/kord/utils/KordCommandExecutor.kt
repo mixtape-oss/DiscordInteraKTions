@@ -2,11 +2,8 @@ package net.perfectdreams.discordinteraktions.platforms.kord.utils
 
 import dev.kord.common.entity.ApplicationCommandType
 import dev.kord.common.entity.DiscordInteraction
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import net.perfectdreams.discordinteraktions.common.commands.CommandManager
+import net.perfectdreams.discordinteraktions.common.commands.InteraKTions
 import net.perfectdreams.discordinteraktions.common.commands.message.MessageCommandExecutor
 import net.perfectdreams.discordinteraktions.common.commands.slash.SlashCommandExecutor
 import net.perfectdreams.discordinteraktions.common.commands.user.UserCommandExecutor
@@ -25,55 +22,48 @@ import net.perfectdreams.discordinteraktions.platforms.kord.entities.KordUser
 /**
  * Checks, matches and executes commands, this is a class because we share code between the `gateway-kord` and `webserver-ktor-kord` modules
  */
-class KordCommandExecutor @OptIn(DelicateCoroutinesApi::class) constructor(
-    val commands: CommandManager,
-    val scope: CoroutineScope = GlobalScope
-) {
-    fun checkAndExecute(request: DiscordInteraction, requestManager: RequestManager) {
-        val bridge = requestManager.bridge
-
+public class KordCommandExecutor(public val interaKTions: InteraKTions) {
+    public fun checkAndExecute(interaction: DiscordInteraction, requests: RequestManager) {
         // Processing subcommands is kinda hard, but not impossible!
-        val commandLabels = CommandDeclarationUtils.findAllSubcommandDeclarationNames(request)
-        val relativeOptions = CommandDeclarationUtils.getNestedOptions(request.data.options.value)
+        val commandLabels = CommandDeclarationUtils.findAllSubcommandDeclarationNames(interaction)
+        val relativeOptions = CommandDeclarationUtils.getNestedOptions(interaction.data.options.value)
 
-        val applicationCommandType = request.data.type.value
-            ?: error("Application Command Type is null, so we don't know what it is going to be used for!")
+        val kordUser = KordUser(interaction.member.value?.user?.value
+            ?: interaction.user.value
+            ?: error("oh no"))
 
-        val kordUser = KordUser(request.member.value?.user?.value ?: request.user.value ?: error("oh no"))
-        val guildId = request.guildId.value
-
-        val interactionData = InteractionData(request.data.resolved.value?.toDiscordInteraKTionsResolvedObjects())
+        val data = InteractionData(interaction.data.resolved.value?.toDiscordInteraKTionsResolvedObjects())
 
         // If the guild ID is not null, then it means that the interaction happened in a guild!
-        val commandContext = if (guildId != null) {
-            val member = request.member.value!! // Should NEVER be null!
-            val kordMember = KordInteractionMember(
-                member,
-                KordUser(member.user.value!!) // Also should NEVER be null!
-            )
+        val commandContext = if (interaction.guildId.value != null) {
+            val member = interaction.member.value?.let {
+                KordInteractionMember(it, KordUser(it.user.value!!))
+            }
 
-            GuildApplicationCommandContext(bridge, kordUser, request.channelId, interactionData, guildId, kordMember)
+            GuildApplicationCommandContext(requests.bridge, kordUser, interaction.channelId, data, interaction.guildId.value!!, member!!, interaction)
         } else {
-            ApplicationCommandContext(bridge, kordUser, request.channelId, interactionData)
+            ApplicationCommandContext(requests.bridge, kordUser, interaction.channelId, data, interaction)
         }
 
-        when (applicationCommandType) {
+        when (val applicationCommandType = interaction.data.type.value) {
+            null ->
+                error("Application Command Type is null, so we don't know what it is going to be used for!")
+
             is ApplicationCommandType.Unknown -> {
                 error("Received unknown command type! ID: ${applicationCommandType.value}")
             }
 
             ApplicationCommandType.ChatInput -> {
-                val command = commands.declarations
+                val command = interaKTions.commandDeclarations
                     .asSequence()
                     .filterIsInstance<SlashCommandDeclaration>() // We only care about Slash Command Declarations here
-                    .mapNotNull { CommandDeclarationUtils.getLabelsConnectedToCommandDeclaration(commandLabels, it) }
-                    .firstOrNull() ?: return
+                    .firstNotNullOfOrNull { CommandDeclarationUtils.getLabelsConnectedToCommandDeclaration(commandLabels, it) }
+                    ?: return
 
                 val executorDeclaration = command.executor ?: return
-                val executor =
-                    commands.executors.first { it.signature() == executorDeclaration.parent } as SlashCommandExecutor
+                val executor = interaKTions.commandExecutors.first { it.signature() == executorDeclaration.parent } as SlashCommandExecutor
 
-                scope.launch {
+                interaKTions.launch {
                     if (executor.conditions.isNotEmpty()) {
                         val execute = executor.conditions.all { it.execute(commandContext) }
                         if (!execute) {
@@ -84,7 +74,7 @@ class KordCommandExecutor @OptIn(DelicateCoroutinesApi::class) constructor(
 
                     /* Convert the Nested Options into a map, then we can access them with our Discord InteraKTion options! */
                     val arguments = CommandDeclarationUtils.convertOptions(
-                        request,
+                        interaction,
                         executorDeclaration,
                         relativeOptions ?: listOf()
                     )
@@ -94,7 +84,7 @@ class KordCommandExecutor @OptIn(DelicateCoroutinesApi::class) constructor(
             }
 
             ApplicationCommandType.User -> {
-                val command = commands.declarations
+                val command = interaKTions.commandDeclarations
                     .asSequence()
                     .filterIsInstance<UserCommandDeclaration>()
                     .mapNotNull { CommandDeclarationUtils.getLabelsConnectedToCommandDeclaration(commandLabels, it) }
@@ -103,18 +93,18 @@ class KordCommandExecutor @OptIn(DelicateCoroutinesApi::class) constructor(
 
                 val executorDeclaration = command.executor
                 val executor =
-                    commands.executors.first { it.signature() == executorDeclaration.parent } as UserCommandExecutor
+                    interaKTions.commandExecutors.first { it.signature() == executorDeclaration.parent } as UserCommandExecutor
 
-                val targetUserId = request.data.targetId.value
+                val targetUserId = interaction.data.targetId.value
                     ?: error("Target User ID is null in a User Command! Bug?")
 
-                val targetUser = interactionData.resolved?.users?.get(targetUserId)
+                val targetUser = data.resolved?.users?.get(targetUserId)
                     ?: error("Target User is null in a User Command! Bug?")
 
-                val targetMember = interactionData.resolved?.members?.get(targetUserId)
+                val targetMember = data.resolved?.members?.get(targetUserId)
                     ?: error("Target Member is null in a User Command! Bug?")
 
-                scope.launch {
+                interaKTions.launch {
                     if (executor.conditions.isNotEmpty()) {
                         val execute = executor.conditions.all { it.execute(commandContext, targetUser, targetMember) }
                         if (!execute) {
@@ -128,29 +118,24 @@ class KordCommandExecutor @OptIn(DelicateCoroutinesApi::class) constructor(
             }
 
             ApplicationCommandType.Message -> {
-                val command = commands.declarations
+                val command = interaKTions.commandDeclarations
                     .asSequence()
                     .filterIsInstance<MessageCommandDeclaration>()
-                    .mapNotNull {
-                        CommandDeclarationUtils.getLabelsConnectedToCommandDeclaration(
-                            commandLabels,
-                            it
-                        )
-                    }
+                    .mapNotNull { CommandDeclarationUtils.getLabelsConnectedToCommandDeclaration(commandLabels, it) }
                     .filterIsInstance<MessageCommandDeclaration>()
                     .firstOrNull() ?: return
 
                 val executorDeclaration = command.executor
                 val executor =
-                    commands.executors.first { it.signature() == executorDeclaration.parent } as MessageCommandExecutor
+                    interaKTions.commandExecutors.first { it.signature() == executorDeclaration.parent } as MessageCommandExecutor
 
-                val targetMessageId = request.data.targetId.value
+                val targetMessageId = interaction.data.targetId.value
                     ?: error("Target Message ID is null in a Message Command! Bug?")
 
-                val targetMessage = interactionData.resolved?.messages?.get(targetMessageId)
+                val targetMessage = data.resolved?.messages?.get(targetMessageId)
                     ?: error("Target Message is null in a Message Command! Bug?")
 
-                scope.launch {
+                interaKTions.launch {
                     if (executor.conditions.isNotEmpty()) {
                         val execute = executor.conditions.all { it.execute(commandContext, targetMessage) }
                         if (!execute) {

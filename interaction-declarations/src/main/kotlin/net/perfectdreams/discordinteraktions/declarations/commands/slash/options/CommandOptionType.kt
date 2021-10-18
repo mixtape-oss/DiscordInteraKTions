@@ -1,87 +1,72 @@
 package net.perfectdreams.discordinteraktions.declarations.commands.slash.options
 
-interface CommandOptionType {
-    val isNullable: Boolean
+public interface CommandOptionType {
+    public val isNullable: Boolean
+        get() = false
 
-    interface ToNullable {
-        fun toNullable(): Nullable
+    public interface ToNullable {
+        public fun toNullable(): Nullable
     }
 
-    abstract class Nullable : CommandOptionType {
-        override val isNullable = true
+    public abstract class Nullable : CommandOptionType {
+        override val isNullable: Boolean = true
     }
 
     // ===[ TYPES ]===
     // String
-    object String : ToNullable, CommandOptionType {
-        override val isNullable = false
-
-        override fun toNullable() = NullableString
+    public object String : ToNullable, CommandOptionType {
+        override fun toNullable(): NullableString = NullableString
     }
 
-    object NullableString : Nullable()
+    public object NullableString : Nullable()
 
     // Integer
-    object Integer : ToNullable, CommandOptionType {
-        override val isNullable = false
-
-        override fun toNullable() = NullableInteger
+    public object Integer : ToNullable, CommandOptionType {
+        override fun toNullable(): NullableInteger = NullableInteger
     }
 
-    object NullableInteger : Nullable()
+    public object NullableInteger : Nullable()
 
     // Number
-    object Number : ToNullable, CommandOptionType {
-        override val isNullable = false
-
-        override fun toNullable() = NullableNumber
+    public object Number : ToNullable, CommandOptionType {
+        override fun toNullable(): NullableNumber = NullableNumber
     }
 
-    object NullableNumber : Nullable()
+    public object NullableNumber : Nullable()
 
     // Boolean
     // Can't be named "Boolean" because that causes Kotlin to go crazy
-    object Bool : ToNullable, CommandOptionType {
-        override val isNullable = false
-
-        override fun toNullable() = NullableBool
+    public object Bool : ToNullable, CommandOptionType {
+        override fun toNullable(): NullableBool = NullableBool
     }
 
-    object NullableBool : Nullable()
+    public object NullableBool : Nullable()
 
     // User
-    object User : ToNullable, CommandOptionType {
-        override val isNullable = false
-
-        override fun toNullable() = NullableUser
+    public object User : ToNullable, CommandOptionType {
+        override fun toNullable(): NullableUser = NullableUser
     }
 
-    object NullableUser : Nullable()
+    public object NullableUser : Nullable()
 
     // Channel
-    object Channel : ToNullable, CommandOptionType {
-        override val isNullable = false
-
-        override fun toNullable() = NullableChannel
+    public object Channel : ToNullable, CommandOptionType {
+        override fun toNullable(): NullableChannel = NullableChannel
     }
 
-    object NullableChannel : Nullable()
+    public object NullableChannel : Nullable()
 
     // Role
-    object Role : ToNullable, CommandOptionType {
-        override val isNullable = false
-
-        override fun toNullable() = NullableRole
+    public object Role : ToNullable, CommandOptionType {
+        override fun toNullable(): NullableRole = NullableRole
     }
 
-    object NullableRole : Nullable()
+    public object NullableRole : Nullable()
 
     // Mentionable
-    object Mentionable : ToNullable, CommandOptionType {
-        override val isNullable: Boolean = false
-
-        override fun toNullable(): Nullable = NullableMentionable
+    public object Mentionable : ToNullable, CommandOptionType {
+        override fun toNullable(): NullableMentionable = NullableMentionable
     }
 
-    object NullableMentionable : Nullable()
+    public object NullableMentionable : Nullable()
 }

@@ -9,8 +9,8 @@ import net.perfectdreams.discordinteraktions.common.context.commands.Application
  * This is the class that should be inherited if you
  * want to create an User Command.
  */
-abstract class UserCommandExecutor : InteractionCommandExecutor() {
-    val conditions = mutableListOf<UserCommandCondition>()
+public abstract class UserCommandExecutor : InteractionCommandExecutor() {
+    public val conditions: MutableList<UserCommandCondition> = mutableListOf()
 
-    abstract suspend fun execute(context: ApplicationCommandContext, targetUser: User, targetMember: Member?)
+    public abstract suspend fun execute(context: ApplicationCommandContext, targetUser: User, targetMember: Member?)
 }

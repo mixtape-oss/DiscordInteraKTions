@@ -9,7 +9,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
-import net.perfectdreams.discordinteraktions.common.commands.CommandManager
+import net.perfectdreams.discordinteraktions.common.commands.InteraKTions
 
 /**
  * Class represents an Rest Interactions Server, which'll connect
@@ -36,11 +36,11 @@ class InteractionsServer(
     }
 
     val rest = RestClient(token)
-    val commandManager = CommandManager()
+    val interaKTions = InteraKTions()
     val interactionRequestHandler: InteractionRequestHandler = DefaultInteractionRequestHandler(
         Snowflake(applicationId),
         rest,
-        commandManager,
+        interaKTions,
     )
 
     /**

@@ -7,7 +7,7 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 @OptIn(ExperimentalContracts::class)
-fun userCommand(name: String, builder: UserCommandDeclarationBuilder.() -> Unit): UserCommandDeclaration {
+public fun userCommand(name: String, builder: UserCommandDeclarationBuilder.() -> Unit): UserCommandDeclaration {
     contract {
         callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
     }
@@ -17,8 +17,8 @@ fun userCommand(name: String, builder: UserCommandDeclarationBuilder.() -> Unit)
         .build()
 }
 
-class UserCommandDeclarationBuilder(val name: String) : ApplicationCommandDeclarationBuilder {
-    var executor: UserCommandExecutorDeclaration? = null
+public class UserCommandDeclarationBuilder(public val name: String) : ApplicationCommandDeclarationBuilder {
+    public var executor: UserCommandExecutorDeclaration? = null
 
     override fun build(): UserCommandDeclaration {
         require (executor != null) { "An executor must be provided" }

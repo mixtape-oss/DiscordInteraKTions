@@ -1,5 +1,5 @@
 package net.perfectdreams.discordinteraktions.api.entities
 
-interface GuildChannel : Channel {
-    val name: String
+public interface GuildChannel : Channel {
+    public val name: String
 }

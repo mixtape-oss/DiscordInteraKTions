@@ -2,4 +2,4 @@ package net.perfectdreams.discordinteraktions.common.components.buttons
 
 import net.perfectdreams.discordinteraktions.common.components.ComponentExecutor
 
-interface ButtonClickExecutor : ComponentExecutor
+public interface ButtonClickExecutor : ComponentExecutor

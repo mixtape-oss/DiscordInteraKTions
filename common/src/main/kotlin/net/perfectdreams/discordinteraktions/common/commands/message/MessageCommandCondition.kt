@@ -4,6 +4,6 @@ import net.perfectdreams.discordinteraktions.common.context.commands.Application
 import net.perfectdreams.discordinteraktions.common.entities.messages.Message
 import net.perfectdreams.discordinteraktions.common.commands.interaction.InteractionCommandCondition
 
-fun interface MessageCommandCondition : InteractionCommandCondition {
-    suspend fun execute(context: ApplicationCommandContext, targetMessage: Message): Boolean
+public fun interface MessageCommandCondition : InteractionCommandCondition {
+    public suspend fun execute(context: ApplicationCommandContext, targetMessage: Message): Boolean
 }

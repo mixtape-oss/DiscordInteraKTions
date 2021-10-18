@@ -9,7 +9,7 @@ import net.perfectdreams.discordinteraktions.common.entities.messages.EditableEp
 import net.perfectdreams.discordinteraktions.common.entities.messages.EphemeralMessage
 import net.perfectdreams.discordinteraktions.platforms.kord.utils.runIfNotMissing
 
-class KordOriginalInteractionEphemeralMessage(
+public class KordOriginalInteractionEphemeralMessage(
     private val rest: RestClient,
     private val applicationId: Snowflake,
     private val interactionToken: String,
@@ -18,7 +18,8 @@ class KordOriginalInteractionEphemeralMessage(
     override val id: Snowflake
         get() = error("Original Interaction Messages do not have an ID!")
 
-    override suspend fun editMessage(block: EphemeralMessageModifyBuilder.() -> Unit): EditableEphemeralMessage = editMessage(EphemeralInteractionOrFollowupMessageModifyBuilder().apply(block))
+    override suspend fun editMessage(block: EphemeralMessageModifyBuilder.() -> Unit): EditableEphemeralMessage =
+        editMessage(EphemeralInteractionOrFollowupMessageModifyBuilder().apply(block))
 
     override suspend fun editMessage(message: EphemeralMessageModifyBuilder): EditableEphemeralMessage {
         val newMessage = rest.interaction.modifyInteractionResponse(

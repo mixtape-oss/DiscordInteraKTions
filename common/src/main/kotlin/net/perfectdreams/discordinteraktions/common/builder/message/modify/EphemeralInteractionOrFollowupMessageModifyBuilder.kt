@@ -6,8 +6,8 @@ import dev.kord.rest.builder.message.AllowedMentionsBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
 
 // From Kord, however this is a interaction OR followup modify builder
-class EphemeralInteractionOrFollowupMessageModifyBuilder : EphemeralMessageModifyBuilder {
-    override var state = MessageModifyStateHolder()
+public class EphemeralInteractionOrFollowupMessageModifyBuilder : EphemeralMessageModifyBuilder {
+    override var state: MessageModifyStateHolder = MessageModifyStateHolder()
 
     override var content: String? by state::content.delegate()
 

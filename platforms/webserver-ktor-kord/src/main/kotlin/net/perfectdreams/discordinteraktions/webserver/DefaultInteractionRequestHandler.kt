@@ -8,18 +8,16 @@ import dev.kord.rest.service.RestClient
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import mu.KotlinLogging
-import net.perfectdreams.discordinteraktions.common.commands.CommandManager
+import net.perfectdreams.discordinteraktions.common.commands.InteraKTions
 import net.perfectdreams.discordinteraktions.common.context.InteractionRequestState
 import net.perfectdreams.discordinteraktions.common.context.RequestBridge
 import net.perfectdreams.discordinteraktions.common.utils.Observable
 import net.perfectdreams.discordinteraktions.platforms.kord.utils.KordCommandExecutor
-import net.perfectdreams.discordinteraktions.platforms.kord.utils.KordComponentChecker
+import net.perfectdreams.discordinteraktions.platforms.kord.utils.KordComponentExecutor
 import net.perfectdreams.discordinteraktions.webserver.context.manager.WebServerRequestManager
 
 /**
@@ -32,15 +30,14 @@ import net.perfectdreams.discordinteraktions.webserver.context.manager.WebServer
 class DefaultInteractionRequestHandler(
     val applicationId: Snowflake,
     val rest: RestClient,
-    val commandManager: CommandManager,
-    val commandScope: CoroutineScope = GlobalScope,
+    val interaKTions: InteraKTions,
 ) : InteractionRequestHandler() {
     companion object {
         private val logger = KotlinLogging.logger {}
     }
 
-    private val kordCommandExecutor = KordCommandExecutor(commandManager, commandScope)
-    private val kordComponentChecker = KordComponentChecker(commandManager)
+    private val kordCommandExecutor = KordCommandExecutor(interaKTions)
+    private val kordComponentExecutor = KordComponentExecutor(interaKTions)
 
     /**
      * Method called when we receive an interaction of the
@@ -119,7 +116,7 @@ class DefaultInteractionRequestHandler(
 
         bridge.manager = requestManager
 
-        kordComponentChecker.checkAndExecute(
+        kordComponentExecutor.checkAndExecute(
             request,
             requestManager
         )
