@@ -21,7 +21,7 @@ allprojects {
     }
 
     group = "net.perfectdreams.discordinteraktions"
-    version = "0.0.13-SNAPSHOT"
+    version = "0.0.14-SNAPSHOT"
 
     tasks.withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "16"
