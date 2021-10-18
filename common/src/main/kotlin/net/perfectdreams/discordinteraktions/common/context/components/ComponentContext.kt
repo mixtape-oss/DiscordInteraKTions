@@ -18,8 +18,8 @@ public open class ComponentContext(
     channelId: Snowflake,
     public val message: Message,
     data: InteractionData,
-    interaction: DiscordInteraction
-) : InteractionContext(bridge, sender, channelId, data, interaction) {
+    handle: DiscordInteraction
+) : InteractionContext(bridge, sender, channelId, data, handle) {
     public suspend fun deferUpdateMessage() {
         if (!isDeferred) {
             bridge.manager.deferUpdateMessage()

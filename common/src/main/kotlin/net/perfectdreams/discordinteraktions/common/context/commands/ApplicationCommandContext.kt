@@ -12,5 +12,5 @@ public open class ApplicationCommandContext(
     sender: User,
     channelId: Snowflake,
     data: InteractionData,
-    interaction: DiscordInteraction
-) : InteractionContext(bridge, sender, channelId, data, interaction)
+    handle: DiscordInteraction
+) : InteractionContext(bridge, sender, channelId, data, handle)

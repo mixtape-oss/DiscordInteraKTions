@@ -14,5 +14,5 @@ public open class GuildApplicationCommandContext(
     data: InteractionData,
     public val guildId: Snowflake,
     public val member: Member,
-    interaction: DiscordInteraction
-) : ApplicationCommandContext(bridge, sender, channelId, data, interaction)
+    handle: DiscordInteraction
+) : ApplicationCommandContext(bridge, sender, channelId, data, handle)

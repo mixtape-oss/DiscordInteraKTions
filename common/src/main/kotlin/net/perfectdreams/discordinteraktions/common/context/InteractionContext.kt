@@ -14,7 +14,7 @@ public abstract class InteractionContext(
     public val sender: User,
     public val channelId: Snowflake,
     public val data: InteractionData,
-    public val interaction: DiscordInteraction
+    public val handle: DiscordInteraction
 ) {
     public val isDeferred: Boolean
         get() = bridge.state.value != InteractionRequestState.NOT_REPLIED_YET
