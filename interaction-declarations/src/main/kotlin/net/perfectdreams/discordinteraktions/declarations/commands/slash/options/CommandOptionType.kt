@@ -75,4 +75,13 @@ interface CommandOptionType {
     }
 
     object NullableRole : Nullable()
+
+    // Mentionable
+    object Mentionable : ToNullable, CommandOptionType {
+        override val isNullable: Boolean = false
+
+        override fun toNullable(): Nullable = NullableMentionable
+    }
+
+    object NullableMentionable : Nullable()
 }

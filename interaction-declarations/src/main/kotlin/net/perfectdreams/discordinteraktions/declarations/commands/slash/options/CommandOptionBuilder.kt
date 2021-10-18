@@ -8,13 +8,7 @@ open class CommandOptionBuilder<T>(
     val choices: MutableList<CommandChoice<T>>
 ) {
     fun choice(value: T, name: String): CommandOptionBuilder<T> {
-        choices.add(
-            CommandChoice(
-                type,
-                name,
-                value
-            )
-        )
+        choices.add(CommandChoice(type, name, value))
         return this
     }
 }

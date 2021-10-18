@@ -9,5 +9,7 @@ import net.perfectdreams.discordinteraktions.common.entities.messages.Message
  * want to create an Message Command.
  */
 abstract class MessageCommandExecutor : InteractionCommandExecutor() {
+    val conditions = mutableListOf<MessageCommandCondition>()
+
     abstract suspend fun execute(context: ApplicationCommandContext, targetMessage: Message)
 }

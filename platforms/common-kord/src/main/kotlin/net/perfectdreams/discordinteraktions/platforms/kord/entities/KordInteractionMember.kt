@@ -9,5 +9,5 @@ class KordInteractionMember(
     val handle: DiscordInteractionGuildMember,
     override val user: User // The user object is here too because sometimes the handle user value may be null!
 ) : Member {
-    override val roles = handle.roles
+    override val roles by handle::roles
 }

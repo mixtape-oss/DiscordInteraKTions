@@ -5,7 +5,7 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
 /**
- * A observable [value] where you can await for a update on [value] by using [awaitChange]
+ * AN observable [value] where you can await for an update on [value] by using [awaitChange]
  */
 class Observable<T>(value: T) {
     var value: T = value

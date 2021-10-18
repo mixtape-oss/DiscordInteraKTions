@@ -45,9 +45,11 @@ class HttpRequestManager(
         require(bridge.state.value != InteractionRequestState.NOT_REPLIED_YET) { "HttpRequestManager shouldn't be in the NOT_REPLIED_YET state!" }
     }
 
-    override suspend fun deferChannelMessage() = error("Can't defer a interaction that was already deferred!")
+    override suspend fun deferChannelMessage() =
+        error("Can't defer an interaction that was already deferred!")
 
-    override suspend fun deferChannelMessageEphemerally() =  error("Can't defer a interaction that was already deferred!")
+    override suspend fun deferChannelMessageEphemerally() =
+        error("Can't defer an interaction that was already deferred!")
 
     override suspend fun sendPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage {
         // *Technically* we can respond to the initial interaction via HTTP too
@@ -98,7 +100,8 @@ class HttpRequestManager(
         )
     }
 
-    override suspend fun deferUpdateMessage() = error("Can't defer a interaction that was already deferred!")
+    override suspend fun deferUpdateMessage() =
+        error("Can't defer an interaction that was already deferred!")
 
     override suspend fun updateMessage(message: PublicInteractionMessageModifyBuilder): EditablePersistentMessage {
         val interactionMessage = KordOriginalInteractionPublicMessage(
@@ -111,7 +114,6 @@ class HttpRequestManager(
         val newMessage = interactionMessage.editMessage(message)
 
         bridge.state.value = InteractionRequestState.ALREADY_REPLIED
-
         bridge.manager = HttpRequestManager(
             bridge,
             rest,
@@ -134,7 +136,6 @@ class HttpRequestManager(
         val newMessage = interactionMessage.editMessage(message)
 
         bridge.state.value = InteractionRequestState.ALREADY_REPLIED
-
         bridge.manager = HttpRequestManager(
             bridge,
             rest,

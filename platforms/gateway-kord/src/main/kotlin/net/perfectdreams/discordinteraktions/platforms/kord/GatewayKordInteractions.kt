@@ -7,21 +7,24 @@ import dev.kord.gateway.Gateway
 import dev.kord.gateway.InteractionCreate
 import dev.kord.gateway.on
 import dev.kord.rest.service.RestClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import net.perfectdreams.discordinteraktions.common.commands.CommandManager
 import net.perfectdreams.discordinteraktions.common.context.InteractionRequestState
 import net.perfectdreams.discordinteraktions.common.context.RequestBridge
 import net.perfectdreams.discordinteraktions.common.utils.Observable
 import net.perfectdreams.discordinteraktions.platforms.kord.context.manager.InitialHttpRequestManager
-import net.perfectdreams.discordinteraktions.platforms.kord.utils.KordCommandChecker
+import net.perfectdreams.discordinteraktions.platforms.kord.utils.KordCommandExecutor
 import net.perfectdreams.discordinteraktions.platforms.kord.utils.KordComponentChecker
 
 @KordPreview
 fun Gateway.installDiscordInteraKTions(
     applicationId: Snowflake,
     rest: RestClient,
-    commandManager: CommandManager
+    commandManager: CommandManager,
+    commandScope: CoroutineScope = GlobalScope
 ) {
-    val kordCommandChecker = KordCommandChecker(commandManager)
+    val kordCommandExecutor = KordCommandExecutor(commandManager, commandScope)
     val kordComponentChecker = KordComponentChecker(commandManager)
 
     on<InteractionCreate> {
@@ -41,7 +44,7 @@ fun Gateway.installDiscordInteraKTions(
         bridge.manager = requestManager
 
         if (request.type == InteractionType.ApplicationCommand)
-            kordCommandChecker.checkAndExecute(
+            kordCommandExecutor.checkAndExecute(
                 request,
                 requestManager
             )

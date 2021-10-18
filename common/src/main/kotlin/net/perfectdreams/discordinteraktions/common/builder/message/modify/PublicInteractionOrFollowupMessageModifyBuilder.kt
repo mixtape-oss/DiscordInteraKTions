@@ -7,7 +7,7 @@ import dev.kord.rest.builder.component.MessageComponentBuilder
 import dev.kord.rest.builder.message.AllowedMentionsBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
 
-// From Kord, however this is a interaction OR followup modify builder
+// From Kord, however this is an interaction OR followup modify builder
 class PublicInteractionOrFollowupMessageModifyBuilder : PersistentMessageModifyBuilder {
     // We need to access the delegated stuff ourselves
     override var state = MessageModifyStateHolder()

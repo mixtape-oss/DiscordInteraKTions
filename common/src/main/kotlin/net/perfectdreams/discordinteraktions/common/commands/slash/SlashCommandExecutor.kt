@@ -9,5 +9,7 @@ import net.perfectdreams.discordinteraktions.common.context.commands.Application
  * want to create an Slash Command.
  */
 abstract class SlashCommandExecutor : InteractionCommandExecutor() {
+    val conditions = mutableListOf<SlashCommandCondition>()
+
     abstract suspend fun execute(context: ApplicationCommandContext, args: SlashCommandArguments)
 }

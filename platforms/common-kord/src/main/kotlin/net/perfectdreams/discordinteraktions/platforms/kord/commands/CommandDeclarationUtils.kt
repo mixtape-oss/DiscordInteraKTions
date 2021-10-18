@@ -8,11 +8,12 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.common.entity.SubCommand
 import net.perfectdreams.discordinteraktions.declarations.commands.InteractionCommandDeclaration
 import net.perfectdreams.discordinteraktions.declarations.commands.SlashCommandDeclaration
-import net.perfectdreams.discordinteraktions.declarations.commands.UserCommandDeclaration
 import net.perfectdreams.discordinteraktions.declarations.commands.slash.SlashCommandExecutorDeclaration
 import net.perfectdreams.discordinteraktions.declarations.commands.slash.options.CommandOption
 import net.perfectdreams.discordinteraktions.declarations.commands.slash.options.CommandOptionType
+import net.perfectdreams.discordinteraktions.platforms.kord.commands.CommandDeclarationUtils.findAllSubcommandDeclarationNames
 import net.perfectdreams.discordinteraktions.platforms.kord.entities.KordChannel
+import net.perfectdreams.discordinteraktions.platforms.kord.entities.KordRole
 import net.perfectdreams.discordinteraktions.platforms.kord.entities.KordUser
 
 object CommandDeclarationUtils {
@@ -27,28 +28,30 @@ object CommandDeclarationUtils {
      * @see getLabelsConnectedToCommandDeclaration
      *
      * @param request the command interaction
-     * @return a list with all of the labels
+     * @return a list with all the labels
      */
     fun findAllSubcommandDeclarationNames(request: DiscordInteraction): List<CommandLabel> {
         val commandLabels = mutableListOf<CommandLabel>(RootCommandLabel(request.data.name.value!!))
-        val result = findAllSubcommandDeclarationNames(commandLabels, request.data.options.value)
-        return result
+        return findAllSubcommandDeclarationNames(commandLabels, request.data.options.value)
     }
 
     private fun findAllSubcommandDeclarationNames(commandLabels: MutableList<CommandLabel>, options: List<Option>?): List<CommandLabel> {
-        val firstOption = options?.firstOrNull()
+        when (val firstOption = options?.firstOrNull()) {
+            is SubCommand -> {
+                commandLabels.add(SubCommandLabel(firstOption.name))
 
-        if (firstOption is SubCommand) {
-            commandLabels.add(SubCommandLabel(firstOption.name))
+                findAllSubcommandDeclarationNames(commandLabels, firstOption.options.value)
+            }
 
-            findAllSubcommandDeclarationNames(commandLabels, firstOption.options.value)
-        } else if (firstOption is CommandGroup) {
-            commandLabels.add(CommandGroupLabel(firstOption.name))
+            is CommandGroup -> {
+                commandLabels.add(CommandGroupLabel(firstOption.name))
 
-            findAllSubcommandDeclarationNames(commandLabels, firstOption.options.value)
-        } else {
-            return commandLabels
+                findAllSubcommandDeclarationNames(commandLabels, firstOption.options.value)
+            }
+
+            else -> return commandLabels
         }
+
         return commandLabels
     }
 
@@ -83,15 +86,17 @@ object CommandDeclarationUtils {
      * @return the matched declaration
      */
     fun getLabelsConnectedToCommandDeclaration(labels: List<CommandLabel>, declaration: InteractionCommandDeclaration): InteractionCommandDeclaration? {
-        // Let's not over complicate this, we already know that Discord only supports one level deep of nesting
-        // (so group -> subcommand)
-        // So let's do easy and quick checks
+        /* Let's not overcomplicate this, we already know that Discord only supports one level deep of nesting
+           (so group -> subcommand)
+           So let's do easy and quick checks */
         if (labels.first() is RootCommandLabel && labels.first().label == declaration.name) {
-            // Matches the root label! Yay!
-            if (labels.size == 1)
-                // If there is only a Root Label, then it means we found our root declaration!
+            /* Matches the root label! Yay! */
+            if (labels.size == 1) {
+                /* If there is only a Root Label, then it means we found our root declaration! */
                 return declaration
+            }
         }
+
         return null
     }
 
@@ -106,41 +111,42 @@ object CommandDeclarationUtils {
      * @return the matched declaration
      */
     fun getLabelsConnectedToCommandDeclaration(labels: List<CommandLabel>, declaration: SlashCommandDeclaration): SlashCommandDeclaration? {
-        // Let's not over complicate this, we already know that Discord only supports one level deep of nesting
-        // (so group -> subcommand)
-        // So let's do easy and quick checks
+        /* Let's not overcomplicate this, we already know that Discord only supports one level deep of nesting
+           (so group -> subcommand)
+           So let's do easy and quick checks */
         if (labels.first() is RootCommandLabel && labels.first().label == declaration.name) {
-            // Matches the root label! Yay!
+            /* Matches the root label! Yay! */
             if (labels.size == 1) {
-                // If there is only a Root Label, then it means we found our root declaration!
+                /* If there is only a Root Label, then it means we found our root declaration! */
                 return declaration
             } else {
                 val secondLabel = labels[1]
 
-                // If not, let's check subcommand groups and subcommands
-                // Thankfully we know when a label is a subcommand or a group!
+                /* If not, let's check subcommand groups and subcommands */
+                /* Thankfully we know when a label is a subcommand or a group! */
                 if (secondLabel is SubCommandLabel) {
                     for (subcommand in declaration.subcommands) {
                         if (secondLabel.label == subcommand.name) {
-                            // Matches, then return this!
+                            /* Matches, then return this! */
                             return subcommand
                         }
                     }
-                    // Nothing found, return...
+
+                    /* Nothing found, return... */
                     return null
                 } else {
                     val thirdLabel = labels[2]
-
                     for (group in declaration.subcommandGroups) {
                         if (group.name == secondLabel.label) {
                             for (subcommand in group.subcommands) {
                                 if (thirdLabel.label == subcommand.name) {
-                                    // Matches, then return this!
+                                    /* Matches, then return this! */
                                     return subcommand
                                 }
                             }
                         }
                     }
+
                     return null
                 }
             }
@@ -157,11 +163,10 @@ object CommandDeclarationUtils {
         val arguments = mutableMapOf<CommandOption<*>, Any?>()
 
         for (option in relativeOptions) {
-            val interaKTionOption = executorDeclaration.options.arguments
-                .firstOrNull { it.name == option.name } ?: continue
+            val interaKTionOption = executorDeclaration.options.arguments.firstOrNull { it.name == option.name }
+                ?: continue
 
             val argument = option as CommandArgument<*>
-
             arguments[interaKTionOption] = convertOption(
                 interaKTionOption,
                 argument,
@@ -172,11 +177,8 @@ object CommandDeclarationUtils {
         return arguments
     }
 
-    private fun convertOption(interaKTionOption: CommandOption<*>, argument: CommandArgument<*>, request: DiscordInteraction): Any? {
-        println(interaKTionOption.type)
-        println(argument.value)
-
-        return when (interaKTionOption.type) {
+    private fun convertOption(option: CommandOption<*>, argument: CommandArgument<*>, request: DiscordInteraction): Any? {
+        return when (option.type) {
             CommandOptionType.User, CommandOptionType.NullableUser -> {
                 val userId = argument.value as Snowflake
 
@@ -184,9 +186,10 @@ object CommandDeclarationUtils {
                 val resolvedMap = resolved.users.value ?: return null
                 val kordInstance = resolvedMap[userId] ?: return null
 
-                // Now we need to wrap the kord user in our own implementation!
+                /* Now we need to wrap the kord user in our own implementation! */
                 return KordUser(kordInstance)
             }
+
             CommandOptionType.Channel, CommandOptionType.NullableChannel -> {
                 val userId = argument.value as Snowflake
 
@@ -194,9 +197,10 @@ object CommandDeclarationUtils {
                 val resolvedMap = resolved.channels.value ?: return null
                 val kordInstance = resolvedMap[userId] ?: return null
 
-                // Now we need to wrap the kord user in our own implementation!
+                /* Now we need to wrap the kord user in our own implementation! */
                 return KordChannel(kordInstance)
             }
+
             CommandOptionType.Role, CommandOptionType.NullableRole -> {
                 val userId = argument.value as Snowflake
 
@@ -204,10 +208,10 @@ object CommandDeclarationUtils {
                 val resolvedMap = resolved.roles.value ?: return null
                 val kordInstance = resolvedMap[userId] ?: return null
 
-                // Now we need to wrap the kord user in our own implementation!
-                TODO("Role arguments are not supported yet")
-                // return KordRole(kordInstance)
+                /* Now we need to wrap the kord user in our own implementation! */
+                return KordRole(kordInstance)
             }
+
             else -> { argument.value }
         }
     }

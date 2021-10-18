@@ -1,35 +1,25 @@
 plugins {
     kotlin("jvm")
-    kotlin("plugin.serialization") version "1.5.10"
-    `maven-publish`
+    kotlin("plugin.serialization") version "1.5.31"
 }
 
 group = "net.perfectdreams.discordinteraktions"
 
 dependencies {
     implementation(kotlin("stdlib"))
-
-    api("dev.kord:kord-rest:0.8.x-SNAPSHOT")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 
     api(project(":interaction-declarations"))
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
-    api("io.github.microutils:kotlin-logging:2.0.3")
+    api("dev.kord:kord-rest:0.8.x-SNAPSHOT")
+    api("io.github.microutils:kotlin-logging:2.0.11")
 }
 
-tasks {
-    compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-}
-
-publishing {
-    publications {
-        register("PerfectDreams", MavenPublication::class.java) {
-            from(components["java"])
-        }
-    }
-}
+//
+//publishing {
+//    publications {
+//        register("PerfectDreams", MavenPublication::class.java) {
+//            from(components["java"])
+//        }
+//    }
+//}

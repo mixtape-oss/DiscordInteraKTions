@@ -3,12 +3,11 @@ package net.perfectdreams.discordinteraktions.webserver
 import dev.kord.common.entity.Snowflake
 import dev.kord.rest.service.RestClient
 import io.ktor.application.*
-import io.ktor.client.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 import net.perfectdreams.discordinteraktions.common.commands.CommandManager
 
@@ -29,9 +28,10 @@ class InteractionsServer(
 ) {
     companion object {
         val json = Json {
-            // If there're any unknown keys, we'll ignore them instead of throwing an exception.
+            // If there are any unknown keys, we'll ignore them instead of throwing an exception.
             this.ignoreUnknownKeys = true
         }
+
         private val logger = KotlinLogging.logger {}
     }
 
@@ -39,8 +39,8 @@ class InteractionsServer(
     val commandManager = CommandManager()
     val interactionRequestHandler: InteractionRequestHandler = DefaultInteractionRequestHandler(
         Snowflake(applicationId),
+        rest,
         commandManager,
-        rest
     )
 
     /**

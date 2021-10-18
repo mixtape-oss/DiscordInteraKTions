@@ -2,7 +2,7 @@ package net.perfectdreams.discordinteraktions.declarations.commands
 
 import net.perfectdreams.discordinteraktions.declarations.commands.slash.SlashCommandExecutorDeclaration
 
-class SlashCommandDeclaration(
+open class SlashCommandDeclaration(
     name: String,
     val description: String,
     val executor: SlashCommandExecutorDeclaration? = null,

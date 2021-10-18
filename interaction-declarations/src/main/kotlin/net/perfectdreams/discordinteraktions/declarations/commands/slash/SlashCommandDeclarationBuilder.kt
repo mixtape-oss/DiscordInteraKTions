@@ -2,14 +2,23 @@ package net.perfectdreams.discordinteraktions.declarations.commands.slash
 
 import net.perfectdreams.discordinteraktions.declarations.commands.SlashCommandDeclaration
 import net.perfectdreams.discordinteraktions.declarations.commands.SlashCommandGroupDeclaration
+import net.perfectdreams.discordinteraktions.declarations.commands.application.ApplicationCommandDeclarationBuilder
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
-fun slashCommand(name: String, description: String, block: SlashCommandDeclarationBuilder.() -> (Unit)): SlashCommandDeclaration {
+@OptIn(ExperimentalContracts::class)
+fun slashCommand(name: String, description: String, builder: SlashCommandDeclarationBuilder.() -> (Unit)): SlashCommandDeclaration {
+    contract {
+        callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+    }
+
     return SlashCommandDeclarationBuilder(name, description)
-        .apply(block)
+        .apply(builder)
         .build()
 }
 
-class SlashCommandDeclarationBuilder(val name: String, val description: String) {
+open class SlashCommandDeclarationBuilder(val name: String, val description: String) : ApplicationCommandDeclarationBuilder {
     var executor: SlashCommandExecutorDeclaration? = null
     val subcommands = mutableListOf<SlashCommandDeclaration>()
     val subcommandGroups = mutableListOf<SlashCommandGroupDeclaration>()
@@ -24,18 +33,18 @@ class SlashCommandDeclarationBuilder(val name: String, val description: String) 
             .build()
     }
 
-    fun build(): SlashCommandDeclaration {
+    override fun build(): SlashCommandDeclaration {
         return SlashCommandDeclaration(
             name,
             description,
             executor,
             subcommands,
-            subcommandGroups
+            subcommandGroups,
         )
     }
 }
 
-class SlashCommandGroupDeclarationBuilder(val name: String, val description: String) {
+open class SlashCommandGroupDeclarationBuilder(val name: String, val description: String) {
     // Groups can't have executors!
     val subcommands = mutableListOf<SlashCommandDeclaration>()
 
@@ -43,7 +52,7 @@ class SlashCommandGroupDeclarationBuilder(val name: String, val description: Str
         subcommands += SlashCommandDeclarationBuilder(name, description).apply(block).build()
     }
 
-    fun build(): SlashCommandGroupDeclaration {
+    open fun build(): SlashCommandGroupDeclaration {
         return SlashCommandGroupDeclaration(
             name,
             description,

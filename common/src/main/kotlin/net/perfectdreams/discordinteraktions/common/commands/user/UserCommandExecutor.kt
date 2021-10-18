@@ -10,5 +10,7 @@ import net.perfectdreams.discordinteraktions.common.context.commands.Application
  * want to create an User Command.
  */
 abstract class UserCommandExecutor : InteractionCommandExecutor() {
+    val conditions = mutableListOf<UserCommandCondition>()
+
     abstract suspend fun execute(context: ApplicationCommandContext, targetUser: User, targetMember: Member?)
 }

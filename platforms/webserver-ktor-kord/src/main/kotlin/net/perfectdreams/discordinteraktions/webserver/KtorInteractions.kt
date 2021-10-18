@@ -38,22 +38,22 @@ fun Routing.installDiscordInteractions(
         val signature = call.request.header("X-Signature-Ed25519")!!
         val timestamp = call.request.header("X-Signature-Timestamp")!!
 
-        println("Signature Header: $signature")
-        println("Timestamp: $timestamp")
+//        println("Signature Header: $signature")
+//        println("Timestamp: $timestamp")
         val text = withContext(Dispatchers.IO) {
             call.receiveStream().bufferedReader(charset = Charsets.UTF_8).readText()
         }
 
-        println("Payload: $text")
+//        println("Payload: $text")
 
         val parse = Json.parseToJsonElement(text)
             .jsonObject
 
         val type = parse["type"]!!.jsonPrimitive.int
 
-        println("Type: $type")
+//        println("Type: $type")
 
-        println("Checking Signature...")
+//        println("Checking Signature...")
 
         val verified = keyVerifier.verifyKey(
             text,
@@ -67,7 +67,7 @@ fun Routing.installDiscordInteractions(
         }
 
         // println("Our Signature: $output")
-        println(parse)
+//        println(parse)
 
         when (type) {
             InteractionType.Ping.type -> handler.onPing(call)

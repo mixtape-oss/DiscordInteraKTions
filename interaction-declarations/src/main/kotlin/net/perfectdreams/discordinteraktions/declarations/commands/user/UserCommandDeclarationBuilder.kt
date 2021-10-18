@@ -1,16 +1,28 @@
 package net.perfectdreams.discordinteraktions.declarations.commands.user
 
 import net.perfectdreams.discordinteraktions.declarations.commands.UserCommandDeclaration
+import net.perfectdreams.discordinteraktions.declarations.commands.application.ApplicationCommandDeclarationBuilder
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
-fun userCommand(name: String, executor: UserCommandExecutorDeclaration): UserCommandDeclaration {
-    return UserCommandDeclarationBuilder(name, executor).build()
+@OptIn(ExperimentalContracts::class)
+fun userCommand(name: String, builder: UserCommandDeclarationBuilder.() -> Unit): UserCommandDeclaration {
+    contract {
+        callsInPlace(builder, InvocationKind.EXACTLY_ONCE)
+    }
+
+    return UserCommandDeclarationBuilder(name)
+        .apply(builder)
+        .build()
 }
 
-class UserCommandDeclarationBuilder(val name: String, val executor: UserCommandExecutorDeclaration) {
-    fun build(): UserCommandDeclaration {
-        return UserCommandDeclaration(
-            name,
-            executor
-        )
+class UserCommandDeclarationBuilder(val name: String) : ApplicationCommandDeclarationBuilder {
+    var executor: UserCommandExecutorDeclaration? = null
+
+    override fun build(): UserCommandDeclaration {
+        require (executor != null) { "An executor must be provided" }
+
+        return UserCommandDeclaration(name, executor!!)
     }
 }

@@ -81,11 +81,8 @@ class InitialHttpRequestManager(
             interactionToken,
             InteractionResponseCreateRequest(
                 InteractionResponseType.DeferredChannelMessageWithSource,
-                InteractionApplicationCommandCallbackData(
-                    flags = MessageFlags {
-                        + MessageFlag.Ephemeral
-                    }.optional()
-                ).optional()
+                InteractionApplicationCommandCallbackData(flags = MessageFlags { + MessageFlag.Ephemeral }.optional())
+                    .optional()
             )
         )
 
