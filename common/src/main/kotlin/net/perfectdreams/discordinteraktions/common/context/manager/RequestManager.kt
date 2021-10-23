@@ -28,12 +28,12 @@ public abstract class RequestManager(public val bridge: RequestBridge) {
     /**
      * The usual way of sending messages to a specific channel/user.
      */
-    public abstract suspend fun sendPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage
+    public abstract suspend fun createPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage
 
     /**
      * The usual way of sending messages to a specific channel/user.
      */
-    public abstract suspend fun sendEphemeralMessage(message: EphemeralInteractionOrFollowupMessageCreateBuilder): EditableEphemeralMessage
+    public abstract suspend fun createEphemeralMessage(message: EphemeralInteractionOrFollowupMessageCreateBuilder): EditableEphemeralMessage
 
     /**
      * A deferred response is the one that you can use to

@@ -95,7 +95,7 @@ public class InitialHttpRequestManager(
         )
     }
 
-    override suspend fun sendPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage {
+    override suspend fun createPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage {
         // *Technically* we can respond to the initial interaction via HTTP too
         rest.interaction.createInteractionResponse(
             request.id,
@@ -128,7 +128,7 @@ public class InitialHttpRequestManager(
         )
     }
 
-    override suspend fun sendEphemeralMessage(message: EphemeralInteractionOrFollowupMessageCreateBuilder): EditableEphemeralMessage {
+    override suspend fun createEphemeralMessage(message: EphemeralInteractionOrFollowupMessageCreateBuilder): EditableEphemeralMessage {
         // *Technically* we can respond to the initial interaction via HTTP too
         rest.interaction.createInteractionResponse(
             request.id,

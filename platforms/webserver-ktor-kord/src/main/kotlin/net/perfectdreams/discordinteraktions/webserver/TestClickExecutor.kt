@@ -1,6 +1,5 @@
 package net.perfectdreams.discordinteraktions.webserver
 
-import dev.kord.rest.builder.message.modify.allowedMentions
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import net.perfectdreams.discordinteraktions.api.entities.User
@@ -8,6 +7,8 @@ import net.perfectdreams.discordinteraktions.common.builder.message.allowedMenti
 import net.perfectdreams.discordinteraktions.common.components.buttons.ButtonClickExecutorDeclaration
 import net.perfectdreams.discordinteraktions.common.components.buttons.ButtonClickWithNoDataExecutor
 import net.perfectdreams.discordinteraktions.common.context.components.ComponentContext
+import net.perfectdreams.discordinteraktions.common.context.components.editMessage
+import net.perfectdreams.discordinteraktions.common.context.sendEphemeralMessage
 
 class TestClickExecutor : ButtonClickWithNoDataExecutor {
     companion object : ButtonClickExecutorDeclaration(TestClickExecutor::class, "test_click")
@@ -18,7 +19,7 @@ class TestClickExecutor : ButtonClickWithNoDataExecutor {
     override suspend fun onClick(user: User, context: ComponentContext) {
         mutex.withLock {
             count++
-            context.updateMessage {
+            context.editMessage {
                 content = "owo whats this??? Contagem: ${count}, último que clicou: <@${user.id.value}>"
 
                 allowedMentions {} // Nothing

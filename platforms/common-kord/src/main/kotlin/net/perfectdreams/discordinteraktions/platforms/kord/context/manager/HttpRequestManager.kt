@@ -49,7 +49,7 @@ public class HttpRequestManager(
     override suspend fun deferChannelMessageEphemerally(): Nothing =
         error("Can't defer an interaction that was already deferred!")
 
-    override suspend fun sendPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage {
+    override suspend fun createPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage {
         // *Technically* we can respond to the initial interaction via HTTP too
         val kordMessage = rest.interaction.createFollowupMessage(
             applicationId,
@@ -74,7 +74,7 @@ public class HttpRequestManager(
         )
     }
 
-    override suspend fun sendEphemeralMessage(message: EphemeralInteractionOrFollowupMessageCreateBuilder): EditableEphemeralMessage {
+    override suspend fun createEphemeralMessage(message: EphemeralInteractionOrFollowupMessageCreateBuilder): EditableEphemeralMessage {
         // *Technically* we can respond to the initial interaction via HTTP too
         val kordMessage = rest.interaction.createFollowupMessage(
             applicationId,

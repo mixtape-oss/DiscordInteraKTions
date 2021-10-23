@@ -5,7 +5,7 @@ import net.perfectdreams.discordinteraktions.common.utils.Observable
 import kotlin.properties.Delegates
 
 /**
- * Bridges code between a interaction handler and the request managers
+ * Bridges code between an interaction handler and the request managers
  *
  * Used to track [state] changes and to allow request managers to switch to other request managers within their own code
  *
@@ -13,8 +13,6 @@ import kotlin.properties.Delegates
  *
  * @param state a [Observable] interaction request state
  */
-public class RequestBridge(
-    public val state: Observable<InteractionRequestState>
-) {
+public class RequestBridge(public val state: Observable<InteractionRequestState>) {
     public var manager: RequestManager by Delegates.notNull()
 }

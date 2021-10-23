@@ -106,7 +106,7 @@ class WebServerRequestManager(
         )
     }
 
-    override suspend fun sendPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage {
+    override suspend fun createPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage {
         call.respondText(
             Json.encodeToString(
                 InteractionResponseCreateRequest(
@@ -144,7 +144,7 @@ class WebServerRequestManager(
         )
     }
 
-    override suspend fun sendEphemeralMessage(message: EphemeralInteractionOrFollowupMessageCreateBuilder): EditableEphemeralMessage {
+    override suspend fun createEphemeralMessage(message: EphemeralInteractionOrFollowupMessageCreateBuilder): EditableEphemeralMessage {
         call.respondText(
             Json.encodeToString(
                 InteractionResponseCreateRequest(

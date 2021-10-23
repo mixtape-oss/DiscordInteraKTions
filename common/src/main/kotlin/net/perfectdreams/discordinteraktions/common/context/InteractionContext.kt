@@ -8,6 +8,9 @@ import net.perfectdreams.discordinteraktions.common.builder.message.create.Publi
 import net.perfectdreams.discordinteraktions.common.entities.messages.EditableEphemeralMessage
 import net.perfectdreams.discordinteraktions.common.entities.messages.EditablePersistentMessage
 import net.perfectdreams.discordinteraktions.common.interactions.InteractionData
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 public abstract class InteractionContext(
     public var bridge: RequestBridge,
@@ -18,7 +21,8 @@ public abstract class InteractionContext(
 ) {
     public val isDeferred: Boolean
         get() = bridge.state.value != InteractionRequestState.NOT_REPLIED_YET
-    public var wasInitiallyDeferredEphemerally: Boolean = false
+
+    public var deferredEphemerally: Boolean = false
 
     /**
      * Defers the application command request message with a public message
@@ -28,31 +32,27 @@ public abstract class InteractionContext(
             error("Trying to defer something that was already deferred!")
 
         bridge.manager.deferChannelMessage()
-        wasInitiallyDeferredEphemerally = false
+        deferredEphemerally = false
     }
 
     /**
-     * Defers the application command request message with a ephemeral message
+     * Defers the application command request message with an ephemeral message
      */
     public suspend fun deferChannelMessageEphemerally() {
         if (isDeferred)
             error("Trying to defer something that was already deferred!")
 
         bridge.manager.deferChannelMessageEphemerally()
-        wasInitiallyDeferredEphemerally = true
+        deferredEphemerally = true
     }
 
-    public suspend fun sendMessage(block: PublicInteractionOrFollowupMessageCreateBuilder.() -> (Unit)): EditablePersistentMessage =
-        sendPublicMessage(PublicInteractionOrFollowupMessageCreateBuilder().apply(block))
-
-    public suspend fun sendEphemeralMessage(block: EphemeralInteractionOrFollowupMessageCreateBuilder.() -> (Unit)): EditableEphemeralMessage =
-        sendEphemeralMessage(EphemeralInteractionOrFollowupMessageCreateBuilder().apply(block))
-
-    private suspend fun sendPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage {
+    public suspend fun createPublicMessage(message: PublicInteractionOrFollowupMessageCreateBuilder): EditablePersistentMessage {
         // Check if state matches what we expect
-        if (bridge.state.value == InteractionRequestState.DEFERRED_CHANNEL_MESSAGE)
-            if (wasInitiallyDeferredEphemerally)
+        if (bridge.state.value == InteractionRequestState.DEFERRED_CHANNEL_MESSAGE) {
+            if (deferredEphemerally) {
                 error("Trying to send a public message but the message was originally deferred ephemerally! Change the \"deferMessage(...)\" call to be public")
+            }
+        }
 
         if (message.files.isNotEmpty() && !isDeferred) {
             // If the message has files and our current bridge state is "NOT_REPLIED_YET", then it means that we need to defer before sending the file!
@@ -60,15 +60,42 @@ public abstract class InteractionContext(
             deferChannelMessage()
         }
 
-        return bridge.manager.sendPublicMessage(message)
+        return bridge.manager.createPublicMessage(message)
     }
 
-    private suspend fun sendEphemeralMessage(message: EphemeralInteractionOrFollowupMessageCreateBuilder): EditableEphemeralMessage {
+    public suspend fun createEphemeralMessage(message: EphemeralInteractionOrFollowupMessageCreateBuilder): EditableEphemeralMessage {
         // Check if state matches what we expect
-        if (bridge.state.value == InteractionRequestState.DEFERRED_CHANNEL_MESSAGE)
-            if (!wasInitiallyDeferredEphemerally)
-                error("Trying to send a ephemeral message but the message was originally deferred as public! Change the \"deferMessage(...)\" call to be ephemeral")
+        if (bridge.state.value == InteractionRequestState.DEFERRED_CHANNEL_MESSAGE) {
+            if (!deferredEphemerally) {
+                error("Trying to send an ephemeral message but the message was originally deferred as public! Change the \"deferMessage(...)\" call to be ephemeral")
+            }
+        }
 
-        return bridge.manager.sendEphemeralMessage(message)
+        return bridge.manager.createEphemeralMessage(message)
     }
 }
+
+@OptIn(ExperimentalContracts::class)
+public suspend inline fun InteractionContext.sendMessage(build: PublicInteractionOrFollowupMessageCreateBuilder.() -> Unit): EditablePersistentMessage {
+    contract {
+        callsInPlace(build, InvocationKind.EXACTLY_ONCE)
+    }
+
+    val builder = PublicInteractionOrFollowupMessageCreateBuilder()
+        .apply(build)
+
+    return createPublicMessage(builder)
+}
+
+@OptIn(ExperimentalContracts::class)
+public suspend inline fun InteractionContext.sendEphemeralMessage(build: EphemeralInteractionOrFollowupMessageCreateBuilder.() -> Unit): EditableEphemeralMessage {
+    contract {
+        callsInPlace(build, InvocationKind.EXACTLY_ONCE)
+    }
+
+    val builder = EphemeralInteractionOrFollowupMessageCreateBuilder()
+        .apply(build)
+
+    return createEphemeralMessage(builder)
+}
+

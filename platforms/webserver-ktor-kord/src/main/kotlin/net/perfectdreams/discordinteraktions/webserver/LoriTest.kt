@@ -7,6 +7,7 @@ import net.perfectdreams.discordinteraktions.common.commands.slash.SlashCommandE
 import net.perfectdreams.discordinteraktions.common.components.selectMenu
 import net.perfectdreams.discordinteraktions.common.context.commands.ApplicationCommandContext
 import net.perfectdreams.discordinteraktions.common.context.commands.slash.SlashCommandArguments
+import net.perfectdreams.discordinteraktions.common.context.sendMessage
 import net.perfectdreams.discordinteraktions.declarations.commands.slash.SlashCommandExecutorDeclaration
 import net.perfectdreams.discordinteraktions.declarations.commands.slash.slashCommand
 import net.perfectdreams.discordinteraktions.declarations.commands.wrappers.SlashCommandDeclarationWrapper
