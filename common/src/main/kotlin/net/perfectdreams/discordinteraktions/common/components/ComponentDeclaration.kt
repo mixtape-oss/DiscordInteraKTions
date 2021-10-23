@@ -16,7 +16,7 @@ public open class ComponentDeclaration(
     public val id: String
 ) {
     public companion object {
-        public val ID_REGEX: Regex = Regex("[A-z0-9]+")
+        public val ID_REGEX: Regex = """[\w\d_-]+""".toRegex()
     }
 
     init {
