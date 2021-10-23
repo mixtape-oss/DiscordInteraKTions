@@ -10,7 +10,7 @@ public open class CommandOptions {
         public val NO_OPTIONS: CommandOptions = object : CommandOptions() {}
     }
 
-    public val arguments: MutableList<CommandOption<*>> = mutableListOf<CommandOption<*>>()
+    public val arguments: MutableList<CommandOption<*>> = mutableListOf()
 
     public fun <T> argument(type: CommandOptionType, name: String, description: String): CommandOptionBuilder<T> =
         CommandOptionBuilder(type, name, description, mutableListOf())

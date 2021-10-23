@@ -15,7 +15,7 @@ internal val kordCommandRegistryLogger = KotlinLogging.logger { }
 public class KordCommandRegistry(
     private val applicationId: Snowflake,
     private val rest: RestClient,
-    private val manager: InteraKTions
+    private val manager: InteraKTions,
 ) : CommandRegistry {
     override suspend fun updateAllCommandsInGuild(guildId: Snowflake, deleteUnknownCommands: Boolean) {
         if (deleteUnknownCommands) {
@@ -126,53 +126,9 @@ public class KordCommandRegistry(
     }
 
     private fun convertCommandOptionToKord(cmdOption: CommandOption<*>, builder: BaseInputChatBuilder) {
-        when (cmdOption.type) {
-            // TODO: Add all possible types
-            CommandOptionType.Integer, CommandOptionType.NullableInteger ->
-                builder.int(cmdOption.name, cmdOption.description) {
-                    this.required = !cmdOption.type.isNullable
+        val converter = optionConverters[cmdOption.type]
+            ?: throw error("No known converter for option type: \"${cmdOption.type::class.simpleName}\"")
 
-                    for (choice in cmdOption.choices) {
-                        choice(choice.name, choice.value as Long)
-                    }
-                }
-            CommandOptionType.Number, CommandOptionType.NullableNumber ->
-                builder.number(cmdOption.name, cmdOption.description) {
-                    this.required = !cmdOption.type.isNullable
-
-                    for (choice in cmdOption.choices) {
-                        choice(choice.name, choice.value as Double)
-                    }
-                }
-            CommandOptionType.String, CommandOptionType.NullableString ->
-                builder.string(cmdOption.name, cmdOption.description) {
-                    this.required = !cmdOption.type.isNullable
-
-                    for (choice in cmdOption.choices) {
-                        choice(choice.name, choice.value as String)
-                    }
-                }
-            CommandOptionType.Bool, CommandOptionType.NullableBool ->
-                builder.boolean(cmdOption.name, cmdOption.description) {
-                    this.required = !cmdOption.type.isNullable
-                }
-            CommandOptionType.User, CommandOptionType.NullableUser ->
-                builder.user(cmdOption.name, cmdOption.description) {
-                    this.required = !cmdOption.type.isNullable
-                }
-            CommandOptionType.Channel, CommandOptionType.NullableChannel ->
-                builder.channel(cmdOption.name, cmdOption.description) {
-                    this.required = !cmdOption.type.isNullable
-                }
-            CommandOptionType.Role, CommandOptionType.NullableRole ->
-                builder.role(cmdOption.name, cmdOption.description) {
-                    this.required = !cmdOption.type.isNullable
-                }
-            CommandOptionType.Mentionable, CommandOptionType.NullableMentionable ->
-                builder.mentionable(cmdOption.name, cmdOption.description) {
-                    this.required = !cmdOption.type.isNullable
-                }
-            else -> error("Unsupported type ${cmdOption.type}")
-        }
+        converter.convert(builder, cmdOption)
     }
 }

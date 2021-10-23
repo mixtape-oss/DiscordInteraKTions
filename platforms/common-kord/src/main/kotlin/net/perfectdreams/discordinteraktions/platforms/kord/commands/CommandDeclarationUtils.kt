@@ -190,43 +190,9 @@ public object CommandDeclarationUtils {
         argument: CommandArgument<*>,
         request: DiscordInteraction
     ): Any? {
-        return when (option.type) {
-            CommandOptionType.User, CommandOptionType.NullableUser -> {
-                val userId = argument.value as Snowflake
+        val converter = optionConverters[option.type]
+            ?: return argument.value
 
-                val resolved = request.data.resolved.value ?: return null
-                val resolvedMap = resolved.users.value ?: return null
-                val kordInstance = resolvedMap[userId] ?: return null
-
-                /* Now we need to wrap the kord user in our own implementation! */
-                return KordUser(kordInstance)
-            }
-
-            CommandOptionType.Channel, CommandOptionType.NullableChannel -> {
-                val userId = argument.value as Snowflake
-
-                val resolved = request.data.resolved.value ?: return null
-                val resolvedMap = resolved.channels.value ?: return null
-                val kordInstance = resolvedMap[userId] ?: return null
-
-                /* Now we need to wrap the kord user in our own implementation! */
-                return KordChannel(kordInstance)
-            }
-
-            CommandOptionType.Role, CommandOptionType.NullableRole -> {
-                val userId = argument.value as Snowflake
-
-                val resolved = request.data.resolved.value ?: return null
-                val resolvedMap = resolved.roles.value ?: return null
-                val kordInstance = resolvedMap[userId] ?: return null
-
-                /* Now we need to wrap the kord user in our own implementation! */
-                return KordRole(kordInstance)
-            }
-
-            else -> {
-                argument.value
-            }
-        }
+        return converter.convert(option, argument, request)
     }
 }
