@@ -1,3 +1,0 @@
-package net.perfectdreams.discordinteraktions.common.commands.interaction
-
-public interface InteractionCommandCondition

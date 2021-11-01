@@ -3,8 +3,8 @@ package net.perfectdreams.discordinteraktions.platform.jda.utils
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.Button
 import net.dv8tion.jda.api.interactions.components.ButtonStyle
-import net.perfectdreams.discordinteraktions.common.utils.ActionRowComponent
-import net.perfectdreams.discordinteraktions.common.utils.ButtonComponent
+import interaktions.common.utils.ActionRowComponent
+import interaktions.common.utils.ButtonComponent
 
 /**
  * Has utils functions that helps to convert Discord InteraKTion classes to JDA classes

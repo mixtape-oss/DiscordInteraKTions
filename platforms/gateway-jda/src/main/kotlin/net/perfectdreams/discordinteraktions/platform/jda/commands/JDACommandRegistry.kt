@@ -7,13 +7,13 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData
-import net.perfectdreams.discordinteraktions.api.entities.Snowflake
-import net.perfectdreams.discordinteraktions.common.commands.CommandManager
-import net.perfectdreams.discordinteraktions.common.commands.CommandRegistry
-import net.perfectdreams.discordinteraktions.declarations.application.ApplicationCommandDeclarationBuilder
-import net.perfectdreams.discordinteraktions.declarations.application.ApplicationCommandGroupDeclarationBuilder
-import net.perfectdreams.discordinteraktions.declarations.slash.options.CommandOption
-import net.perfectdreams.discordinteraktions.declarations.slash.options.CommandOptionType
+import interaktions.api.entity.Snowflake
+import interaktions.common.commands.CommandManager
+import interaktions.common.commands.CommandRegistry
+import interaktions.declaration.application.ApplicationCommandDeclarationBuilder
+import interaktions.declaration.application.ApplicationCommandGroupDeclarationBuilder
+import interaktions.declaration.slash.options.CommandOption
+import interaktions.declaration.slash.options.CommandOptionType
 import net.perfectdreams.discordinteraktions.platform.jda.utils.await
 
 class JDACommandRegistry(private val jda: JDA, private val manager: CommandManager) : CommandRegistry {

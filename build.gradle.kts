@@ -20,8 +20,8 @@ allprojects {
         maven("https://repo.perfectdreams.net")
     }
 
-    group = "net.perfectdreams.discordinteraktions"
-    version = "0.0.17-SNAPSHOT"
+    group = "interaktions"
+    version = "0.1.0-SNAPSHOT"
 
     tasks.withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "16"

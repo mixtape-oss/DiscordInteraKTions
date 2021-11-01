@@ -2,10 +2,10 @@ package net.perfectdreams.discordinteraktions.platform.jda.utils
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import net.perfectdreams.discordinteraktions.api.entities.User
-import net.perfectdreams.discordinteraktions.common.context.buttons.ButtonClickContext
-import net.perfectdreams.discordinteraktions.common.utils.ButtonClickExecutor
-import net.perfectdreams.discordinteraktions.common.utils.TestData
+import interaktions.api.entity.User
+import interaktions.common.context.buttons.ButtonClickContext
+import interaktions.common.utils.ButtonClickExecutor
+import interaktions.common.utils.TestData
 
 class ButtonClickExecutorTest : ButtonClickExecutor<TestData> {
     override suspend fun onClickConvertToProperData(user: User, context: ButtonClickContext, data: Any?) {

@@ -1,10 +1,10 @@
 package net.perfectdreams.discordinteraktions.platform.jda.context.manager
 
 import net.dv8tion.jda.api.interactions.components.ButtonInteraction
-import net.perfectdreams.discordinteraktions.common.context.RequestBridge
-import net.perfectdreams.discordinteraktions.common.utils.ActionRowComponent
-import net.perfectdreams.discordinteraktions.common.utils.ButtonComponent
-import net.perfectdreams.discordinteraktions.common.utils.InteractionMessage
+import interaktions.common.context.RequestBridge
+import interaktions.common.utils.ActionRowComponent
+import interaktions.common.utils.ButtonComponent
+import interaktions.common.utils.InteractionMessage
 import net.perfectdreams.discordinteraktions.platform.jda.utils.JDAConversionUtils
 import net.perfectdreams.discordinteraktions.platform.jda.utils.await
 

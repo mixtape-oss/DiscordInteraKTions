@@ -1,9 +1,9 @@
 package net.perfectdreams.discordinteraktions.platform.jda.entities
 
-import net.perfectdreams.discordinteraktions.api.entities.Member
-import net.perfectdreams.discordinteraktions.api.entities.Snowflake
-import net.perfectdreams.discordinteraktions.api.entities.User
-import net.perfectdreams.discordinteraktions.api.entities.UserAvatar
+import interaktions.api.entity.Member
+import interaktions.api.entity.Snowflake
+import interaktions.api.entity.User
+import interaktions.api.entity.UserAvatar
 
 class JDAMember(private val member: net.dv8tion.jda.api.entities.Member) : Member {
     override val user: User
